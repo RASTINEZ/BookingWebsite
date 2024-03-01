@@ -1,0 +1,15 @@
+/* App.css */
+
+.container {
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap onto the next line */
+  justify-content: center;
+  gap: 20px; /* Adjust the gap between cards as needed */
+  margin-top: 20px; /* Add some top margin to separate the cards from the navbar */
+}
+
+.card {
+  flex: 0 0 calc(20% - 20px); /* Calculate the width for maximum of 5 cards per row */
+  /* Adjust the width and margin as needed to fit the desired number of cards per row */
+  margin-bottom: 20px; /* Add bottom margin to separate rows */
+}
