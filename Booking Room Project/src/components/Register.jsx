@@ -12,6 +12,7 @@ const Register = ({}) => {
   });
   const [error, setError] = useState('');
   const navigate  = useNavigate();
+  
   const [username, setUsername] = useState(null);
 
 useEffect(() => {

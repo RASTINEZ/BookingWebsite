@@ -13,6 +13,8 @@ const db = mysql.createConnection({
     database: 'room_database'
 });
 
+
+
 // Retrieve all users
 app.get('/users', (req, res) => {
     const sql = "SELECT * FROM users";
@@ -91,17 +93,65 @@ app.post('/login', (req, res) => {
     });
 });
 
-
+//Rooms endpoint
 app.get('/rooms', (re,res) => {
     const sql = "SELECT * FROM rooms";
     db.query(sql,(err, data) =>{
         if(err) return res.json(err);
         return res.json(data);
 
-    })
+    });
     
 
-})
+});
+
+
+
+// Endpoint to get schedule for a specific room and date
+app.get('/schedule/:roomId', (req, res) => {
+    const { roomId } = req.params;
+    const { date } = req.query;
+
+    // Query the bookings table for bookings for the specified room and date
+    const sql = "SELECT start_time, end_time FROM bookings WHERE room_id = ? AND DATE(start_time) = ?";
+    db.query(sql, [roomId, date], (err, bookings) => {
+        if (err) {
+            console.error('Error fetching schedule:', err);
+            return res.status(500).json({ error: 'An error occurred while fetching schedule' });
+        }
+        
+        // If there are no bookings for the specified room and date, generate available time slots
+        if (bookings.length === 0) {
+            const availableTimeSlots = [];
+            const startTime = 7; // 07:00 AM
+            const endTime = 20; // 08:00 PM
+            for (let hour = startTime; hour <= endTime; hour++) {
+                const time = `${hour < 10 ? '0' + hour : hour}:00`;
+                availableTimeSlots.push({ startTime: time, endTime: time, available: true });
+            }
+            return res.json(availableTimeSlots);
+        }
+        
+        // Format the schedule data based on existing bookings
+        const schedule = bookings.map(booking => ({
+            startTime: booking.start_time,
+            endTime: booking.end_time,
+            available: false, // Mark booked time slots as not available
+        }));
+
+        res.json(schedule);
+    });
+});
+
+
+  
+
+
+
+
+
+
+
 
 
 app.listen(8081, () => {

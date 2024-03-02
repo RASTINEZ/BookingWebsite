@@ -11,6 +11,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import Schedule from './components/Schedule.jsx'
 
 
 
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "Register",
     element: <Register/>,
+  },
+  {
+    path: "Schedule/:roomId",
+    element: <Schedule/>,
   },
   
 

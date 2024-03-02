@@ -27,24 +27,17 @@ export const App = () => {
 
   return (
     <div>
-      <NavBar username={username} /> {/* Pass username to Navbar */}
-      
-
+      <NavBar username={username} />
       <div className="container">
-      
-      {data.map((room, index) => (
+        {data.map((room, index) => (
           <Card
             key={index}
             title={`Room ${room.room_number}`}
             content={`Details :  Size: ${room.room_type}  <br> Status: ${room.available_status}`}
-            
-            url=""
+            roomId={room.room_number} // Pass room_number as a prop to Card
           />
         ))}
-
-
-
-    </div>
+      </div>
     </div>
   );
 }
