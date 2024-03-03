@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 02, 2024 at 03:03 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Mar 04, 2024 at 12:46 AM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 8.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,7 +35,7 @@ CREATE TABLE `bookings` (
   `booked_by` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `bookings`
@@ -44,7 +44,24 @@ CREATE TABLE `bookings` (
 INSERT INTO `bookings` (`booking_id`, `room_id`, `start_time`, `end_time`, `booked_by`, `created_at`, `updated_at`) VALUES
 (1, 704, '2024-03-05 08:30:00', '2024-03-05 09:30:00', 'test', '2024-03-01 22:18:16', '2024-03-01 22:18:16'),
 (2, 704, '2024-03-06 09:30:00', '2024-03-06 10:30:00', 'ttttt', '2024-03-02 02:01:55', '2024-03-02 02:01:55'),
-(3, 704, '2024-03-07 09:30:00', '2024-03-07 13:30:00', 'ddd', '2024-03-02 02:02:51', '2024-03-02 02:02:51');
+(3, 704, '2024-03-07 09:30:00', '2024-03-07 13:30:00', 'ddd', '2024-03-02 02:02:51', '2024-03-02 02:02:51'),
+(4, 704, '2024-03-04 07:30:00', '2024-03-04 08:00:00', NULL, '2024-03-03 22:20:25', '2024-03-03 22:20:25'),
+(5, 704, '2024-03-04 07:00:00', '2024-03-04 07:30:00', NULL, '2024-03-03 22:20:25', '2024-03-03 22:20:25'),
+(6, 704, '2024-03-07 08:30:00', '2024-03-07 09:00:00', NULL, '2024-03-03 22:20:56', '2024-03-03 22:20:56'),
+(7, 704, '2024-03-07 09:00:00', '2024-03-07 09:30:00', NULL, '2024-03-03 22:20:56', '2024-03-03 22:20:56'),
+(8, 704, '2024-03-04 08:00:00', '2024-03-04 08:30:00', NULL, '2024-03-03 22:24:59', '2024-03-03 22:24:59'),
+(9, 704, '2024-03-04 08:30:00', '2024-03-04 09:00:00', NULL, '2024-03-03 22:24:59', '2024-03-03 22:24:59'),
+(10, 704, '2024-03-04 08:00:00', '2024-03-04 08:30:00', NULL, '2024-03-03 22:25:04', '2024-03-03 22:25:04'),
+(11, 704, '2024-03-04 08:30:00', '2024-03-04 09:00:00', NULL, '2024-03-03 22:25:04', '2024-03-03 22:25:04'),
+(12, 704, '2024-03-04 09:00:00', '2024-03-04 09:30:00', NULL, '2024-03-03 22:26:13', '2024-03-03 22:26:13'),
+(13, 704, '2024-03-04 09:30:00', '2024-03-04 10:00:00', NULL, '2024-03-03 22:26:13', '2024-03-03 22:26:13'),
+(14, 704, '2024-03-04 10:00:00', '2024-03-04 10:30:00', NULL, '2024-03-03 22:28:01', '2024-03-03 22:28:01'),
+(15, 704, '2024-03-04 10:30:00', '2024-03-04 11:00:00', NULL, '2024-03-03 22:28:01', '2024-03-03 22:28:01'),
+(16, 704, '2024-03-04 11:00:00', '2024-03-04 11:30:00', 'rastin', '2024-03-03 22:34:06', '2024-03-03 22:34:06'),
+(17, 709, '2024-03-04 07:30:00', '2024-03-04 08:00:00', 'rastin', '2024-03-03 22:35:19', '2024-03-03 22:35:19'),
+(18, 704, '2024-03-04 11:30:00', '2024-03-04 12:00:00', 'rastin', '2024-03-03 22:36:29', '2024-03-03 22:36:29'),
+(19, 704, '2024-03-04 15:00:00', '2024-03-04 15:30:00', 'rastin', '2024-03-03 22:39:55', '2024-03-03 22:39:55'),
+(20, 704, '2024-03-04 17:30:00', '2024-03-04 18:00:00', 'rastin', '2024-03-03 22:39:55', '2024-03-03 22:39:55');
 
 -- --------------------------------------------------------
 
@@ -61,7 +78,7 @@ CREATE TABLE `rooms` (
   `room_type` enum('normal','big') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `rooms`
@@ -83,7 +100,7 @@ CREATE TABLE `users` (
   `username` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
@@ -96,7 +113,8 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`) VALUES
 (4, 'test4', 'test4@gmail.com', '44444444'),
 (5, 'test5', 'test5@gmail.com', '55555555'),
 (6, 'test6', 's6@gmail.com', '55555555'),
-(7, 'test7', 's7@gmail.com', '77777777');
+(7, 'test7', 's7@gmail.com', '77777777'),
+(8, 'rastin', 'rastinez1337@gmail.com', '12345678');
 
 --
 -- Indexes for dumped tables
@@ -129,7 +147,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `rooms`
@@ -141,7 +159,7 @@ ALTER TABLE `rooms`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables

@@ -5,13 +5,13 @@ import './index.css'
 import Login from './components/Login.jsx'
 import Register  from './components/Register.jsx'
 
-
+import Schedule from './components/Schedule.jsx'
 
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Schedule from './components/Schedule.jsx'
+
 
 
 

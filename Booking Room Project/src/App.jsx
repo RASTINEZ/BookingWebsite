@@ -8,6 +8,7 @@ import './App.css'; // Import CSS file for styling
 export const App = () => {
   const [data, setData] = useState([])
   const [username, setUsername] = useState(null);
+  
   useEffect(() => {
     fetch('http://localhost:8081/rooms')
     .then(res => res.json())
@@ -15,7 +16,9 @@ export const App = () => {
     .catch(err => console.log(err));
 
     const storedUsername = localStorage.getItem('username'); 
+    
     setUsername(storedUsername); 
+    
 
 
 
@@ -35,6 +38,8 @@ export const App = () => {
             title={`Room ${room.room_number}`}
             content={`Details :  Size: ${room.room_type}  <br> Status: ${room.available_status}`}
             roomId={room.room_number} // Pass room_number as a prop to Card
+            username={username}
+            url={"https://previews.123rf.com/images/rilueda/rilueda1410/rilueda141000244/32842748-modern-lecture-room.jpg"}
           />
         ))}
       </div>

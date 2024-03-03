@@ -145,6 +145,26 @@ app.get('/schedule/:roomId', (req, res) => {
 
 
   
+// Endpoint to add bookings to the database
+app.post('/bookings', (req, res) => {
+    const { roomId, date, selectedSlots, username } = req.body;
+
+    // Validate incoming data
+
+    // Insert bookings into the database
+    const sql = "INSERT INTO bookings (room_id, start_time, end_time, booked_by) VALUES (?, ?, ?, ?)";
+    selectedSlots.forEach(slot => {
+        db.query(sql, [roomId, `${date} ${slot.startTime}`, `${date} ${slot.endTime}`, username], (err, result) => {
+            if (err) {
+                console.error('Error inserting booking:', err);
+                return res.status(500).json({ error: 'An error occurred while inserting booking' });
+            }
+            console.log('Booking inserted successfully');
+        });
+    });
+
+    res.status(200).json({ message: 'Bookings added successfully' });
+});
 
 
 

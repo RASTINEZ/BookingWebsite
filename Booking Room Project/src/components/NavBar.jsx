@@ -1,12 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 
 const NavBar = ({username}) => {
+  const navigate  = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem('username');    
     setUsername(null); // Update state in App component (if applicable)
     // Optionally redirect to the login page:
-    window.location.href='/login';  // Or use useNavigate() if you have it set up
+    alert('Logout successful'); // Show success message as alert
+    setTimeout(() => {
+        navigate('/'); // Use navigate directly
+    }, 1000);
+
+     // Or use useNavigate() if you have it set up
+
+    window.location.reload();
   };
 
   const [storedUsername, setUsername] = useState(null);
@@ -29,7 +37,7 @@ const NavBar = ({username}) => {
           <a className="nav-link active" aria-current="page" href="/">Home</a>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="rooms">Rooms</a>
+          <a className="nav-link" href="/">Rooms</a>
         </li>
         <li className="nav-item">
           <a className="nav-link" href="schedule">Schedule</a>

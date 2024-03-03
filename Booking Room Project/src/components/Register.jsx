@@ -52,7 +52,7 @@ useEffect(() => {
       alert('Registration successful');
       setTimeout(() => {
         navigate('/login'); // Use navigate directly
-      }, 2000);
+      }, 1000);
     } catch (err) {
       setError(err.message);
     }
