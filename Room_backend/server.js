@@ -95,7 +95,7 @@ app.post('/login', (req, res) => {
 
 //Rooms endpoint
 app.get('/rooms', (re,res) => {
-    const sql = "SELECT * FROM rooms";
+    const sql = "SELECT * FROM rooms WHERE available_status = 'available'";
     db.query(sql,(err, data) =>{
         if(err) return res.json(err);
         return res.json(data);
@@ -166,6 +166,17 @@ app.post('/bookings', (req, res) => {
     res.status(200).json({ message: 'Bookings added successfully' });
 });
 
+// Endpoint to get rooms in 'maintain' status
+app.get('/maintain', (req, res) => {
+    const sql = "SELECT * FROM rooms WHERE available_status = 'maintain'";
+    db.query(sql, (err, data) => {
+        if (err) {
+            console.error('Error fetching rooms in maintain status:', err);
+            return res.status(500).json({ error: 'An error occurred while fetching rooms in maintain status' });
+        }
+        return res.json(data);
+    });
+});
 
 
 

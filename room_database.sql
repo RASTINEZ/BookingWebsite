@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 04, 2024 at 12:46 AM
+-- Generation Time: Mar 04, 2024 at 09:13 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -61,7 +61,9 @@ INSERT INTO `bookings` (`booking_id`, `room_id`, `start_time`, `end_time`, `book
 (17, 709, '2024-03-04 07:30:00', '2024-03-04 08:00:00', 'rastin', '2024-03-03 22:35:19', '2024-03-03 22:35:19'),
 (18, 704, '2024-03-04 11:30:00', '2024-03-04 12:00:00', 'rastin', '2024-03-03 22:36:29', '2024-03-03 22:36:29'),
 (19, 704, '2024-03-04 15:00:00', '2024-03-04 15:30:00', 'rastin', '2024-03-03 22:39:55', '2024-03-03 22:39:55'),
-(20, 704, '2024-03-04 17:30:00', '2024-03-04 18:00:00', 'rastin', '2024-03-03 22:39:55', '2024-03-03 22:39:55');
+(20, 704, '2024-03-04 17:30:00', '2024-03-04 18:00:00', 'rastin', '2024-03-03 22:39:55', '2024-03-03 22:39:55'),
+(21, 704, '2024-03-15 12:00:00', '2024-03-15 12:30:00', 'test', '2024-03-04 16:22:53', '2024-03-04 16:22:53'),
+(22, 704, '2024-03-15 08:00:00', '2024-03-15 08:30:00', 'test', '2024-03-04 16:22:53', '2024-03-04 16:22:53');
 
 -- --------------------------------------------------------
 
@@ -72,22 +74,24 @@ INSERT INTO `bookings` (`booking_id`, `room_id`, `start_time`, `end_time`, `book
 CREATE TABLE `rooms` (
   `id` int(11) NOT NULL,
   `room_number` varchar(50) NOT NULL,
-  `available_status` enum('available','booked') NOT NULL DEFAULT 'available',
+  `available_status` enum('Available','booked','Maintain') NOT NULL DEFAULT 'Available',
   `booking_start_date` date DEFAULT NULL,
   `booking_end_date` date DEFAULT NULL,
-  `room_type` enum('normal','big') NOT NULL,
+  `room_type` enum('Normal','Big') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `details` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `room_number`, `available_status`, `booking_start_date`, `booking_end_date`, `room_type`, `created_at`, `updated_at`) VALUES
-(704, '704', 'available', NULL, NULL, 'normal', '2024-02-27 12:48:30', '2024-02-27 12:48:30'),
-(709, '709', 'available', NULL, NULL, 'big', '2024-02-27 12:47:41', '2024-02-27 13:05:23'),
-(710, '710', 'available', NULL, NULL, 'big', '2024-02-27 12:48:17', '2024-02-27 12:48:17');
+INSERT INTO `rooms` (`id`, `room_number`, `available_status`, `booking_start_date`, `booking_end_date`, `room_type`, `created_at`, `updated_at`, `details`) VALUES
+(703, '703', 'Maintain', NULL, NULL, 'Big', '2024-03-04 19:00:28', '2024-03-04 19:29:09', 'microphone broken, แอร์ไม่เย็น'),
+(704, '704', 'Available', NULL, NULL, 'Normal', '2024-02-27 12:48:30', '2024-02-27 12:48:30', NULL),
+(709, '709', 'Available', NULL, NULL, 'Big', '2024-02-27 12:47:41', '2024-02-27 13:05:23', NULL),
+(710, '710', 'Maintain', NULL, NULL, 'Big', '2024-02-27 12:48:17', '2024-03-04 18:41:34', 'bad lights');
 
 -- --------------------------------------------------------
 
@@ -147,7 +151,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `rooms`

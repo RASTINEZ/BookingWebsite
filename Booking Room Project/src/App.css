@@ -13,3 +13,47 @@
   /* Adjust the width and margin as needed to fit the desired number of cards per row */
   margin-bottom: 20px; /* Add bottom margin to separate rows */
 }
+.maintain-rooms-container {
+  text-align: center;
+  padding: 20px;
+  background-color: hsl(0, 73%, 36%);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 2px auto;
+  max-width: 500px;
+}
+.maintain-rooms-container2 {
+  text-align: left;
+  padding: 10px;
+  background-color: hsl(0, 34%, 63%);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0px auto;
+  max-width: 500px;
+}
+
+.maintain-rooms-list {
+  list-style: none;
+  padding: 0;
+}
+
+.maintain-rooms-list li {
+  margin-bottom: 5px;
+  padding-left: 10px; /* Adjust as needed */
+  font-family: 'Courier New', Courier, monospace; /* Fixed-width font */
+  overflow-wrap: break-word; /* Add this line */
+  word-wrap: break-word; /* Add this line for compatibility */
+  box-sizing: border-box; /* Ensure padding and borders are included in the width */
+}
+
+.maintain-rooms-list li span.room {
+  font-size: larger; /* Increase font size for the room number */
+  font-weight: bold; /* Make the room number text bold */
+}
+
+.maintain-rooms-list li span.details {
+  font-size: larger; /* Increase font size for the details */
+  font-weight: bold; /* Make the text bold */
+}
+
+
