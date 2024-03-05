@@ -6,6 +6,7 @@ import Login from './components/Login.jsx'
 import Register  from './components/Register.jsx'
 
 import Schedule from './components/Schedule.jsx'
+import HistoryPage from './components/HistoryPage.jsx'
 
 import {
   createBrowserRouter,
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: "Schedule/:roomId",
     element: <Schedule/>,
+  },
+  {
+    path: "HistoryPage/:username",
+    element: <HistoryPage/>,
   },
   
 

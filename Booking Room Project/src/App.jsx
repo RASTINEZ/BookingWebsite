@@ -48,7 +48,7 @@ export const App = () => {
           <Card
             key={index}
             title={`Room ${room.room_number}`}
-            content={`Size: ${room.room_type}  <br> Status: ${room.available_status}`}
+            content={`Size: ${room.room_type}  <br> Status:🟢${room.available_status} `}
             roomId={room.room_number} // Pass room_number as a prop to Card
             username={username}
             url={"https://previews.123rf.com/images/rilueda/rilueda1410/rilueda141000244/32842748-modern-lecture-room.jpg"}
@@ -83,6 +83,7 @@ export const App = () => {
         </ul>
       </div>
     
+    <br/><br/><br/><br/><br/><br/><br/><br/>
 
     </div>
   );

@@ -166,6 +166,52 @@ app.post('/bookings', (req, res) => {
     res.status(200).json({ message: 'Bookings added successfully' });
 });
 
+
+app.get('/bookingHistory', (req, res) => {
+    const { username } = req.query;
+    // Query the database to retrieve booking history for the specified username
+    const sql = "SELECT * FROM bookings WHERE booked_by = ?";
+    db.query(sql, [username], (err, results) => {
+        if (err) {
+            console.error('Error fetching booking history:', err);
+            return res.status(500).json({ error: 'An error occurred while fetching booking history' });
+        }
+        return res.json(results);
+    });
+});
+
+
+
+
+
+// Assuming you're using Express.js
+app.delete('/cancelBooking/:bookingId', (req, res) => {
+  const { bookingId } = req.params;
+
+  // Perform the cancellation logic, such as updating the database
+  const sql = 'DELETE FROM bookings WHERE booking_id = ?';
+  db.query(sql, [bookingId], (err, result) => {
+    if (err) {
+      console.error('Error cancelling booking:', err);
+      return res.status(500).json({ error: 'An error occurred while cancelling booking' });
+    }
+    // Check if the booking was found and deleted
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    // Booking successfully cancelled
+    return res.status(200).json({ message: 'Booking cancelled successfully' });
+  });
+});
+
+
+
+
+
+ 
+  
+  
+
 // Endpoint to get rooms in 'maintain' status
 app.get('/maintain', (req, res) => {
     const sql = "SELECT * FROM rooms WHERE available_status = 'maintain'";

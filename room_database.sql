@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 04, 2024 at 09:13 PM
+-- Generation Time: Mar 05, 2024 at 08:33 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -58,11 +58,7 @@ INSERT INTO `bookings` (`booking_id`, `room_id`, `start_time`, `end_time`, `book
 (14, 704, '2024-03-04 10:00:00', '2024-03-04 10:30:00', NULL, '2024-03-03 22:28:01', '2024-03-03 22:28:01'),
 (15, 704, '2024-03-04 10:30:00', '2024-03-04 11:00:00', NULL, '2024-03-03 22:28:01', '2024-03-03 22:28:01'),
 (16, 704, '2024-03-04 11:00:00', '2024-03-04 11:30:00', 'rastin', '2024-03-03 22:34:06', '2024-03-03 22:34:06'),
-(17, 709, '2024-03-04 07:30:00', '2024-03-04 08:00:00', 'rastin', '2024-03-03 22:35:19', '2024-03-03 22:35:19'),
-(18, 704, '2024-03-04 11:30:00', '2024-03-04 12:00:00', 'rastin', '2024-03-03 22:36:29', '2024-03-03 22:36:29'),
 (19, 704, '2024-03-04 15:00:00', '2024-03-04 15:30:00', 'rastin', '2024-03-03 22:39:55', '2024-03-03 22:39:55'),
-(20, 704, '2024-03-04 17:30:00', '2024-03-04 18:00:00', 'rastin', '2024-03-03 22:39:55', '2024-03-03 22:39:55'),
-(21, 704, '2024-03-15 12:00:00', '2024-03-15 12:30:00', 'test', '2024-03-04 16:22:53', '2024-03-04 16:22:53'),
 (22, 704, '2024-03-15 08:00:00', '2024-03-15 08:30:00', 'test', '2024-03-04 16:22:53', '2024-03-04 16:22:53');
 
 -- --------------------------------------------------------
@@ -75,9 +71,7 @@ CREATE TABLE `rooms` (
   `id` int(11) NOT NULL,
   `room_number` varchar(50) NOT NULL,
   `available_status` enum('Available','booked','Maintain') NOT NULL DEFAULT 'Available',
-  `booking_start_date` date DEFAULT NULL,
-  `booking_end_date` date DEFAULT NULL,
-  `room_type` enum('Normal','Big') NOT NULL,
+  `room_type` enum('Normal','Big') NOT NULL DEFAULT 'Normal',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `details` varchar(255) DEFAULT NULL
@@ -87,11 +81,18 @@ CREATE TABLE `rooms` (
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `room_number`, `available_status`, `booking_start_date`, `booking_end_date`, `room_type`, `created_at`, `updated_at`, `details`) VALUES
-(703, '703', 'Maintain', NULL, NULL, 'Big', '2024-03-04 19:00:28', '2024-03-04 19:29:09', 'microphone broken, แอร์ไม่เย็น'),
-(704, '704', 'Available', NULL, NULL, 'Normal', '2024-02-27 12:48:30', '2024-02-27 12:48:30', NULL),
-(709, '709', 'Available', NULL, NULL, 'Big', '2024-02-27 12:47:41', '2024-02-27 13:05:23', NULL),
-(710, '710', 'Maintain', NULL, NULL, 'Big', '2024-02-27 12:48:17', '2024-03-04 18:41:34', 'bad lights');
+INSERT INTO `rooms` (`id`, `room_number`, `available_status`, `room_type`, `created_at`, `updated_at`, `details`) VALUES
+(701, '701', 'Available', 'Normal', '2024-03-05 19:16:35', '2024-03-05 19:16:35', NULL),
+(702, '702', 'Available', 'Normal', '2024-03-05 19:16:35', '2024-03-05 19:16:35', NULL),
+(703, '703', 'Maintain', 'Big', '2024-03-04 19:00:28', '2024-03-04 19:29:09', 'microphone broken, แอร์ไม่เย็น'),
+(704, '704', 'Available', 'Normal', '2024-02-27 12:48:30', '2024-02-27 12:48:30', NULL),
+(705, '705', 'Available', 'Normal', '2024-03-05 19:19:45', '2024-03-05 19:19:45', NULL),
+(706, '706', 'Available', 'Normal', '2024-03-05 19:20:07', '2024-03-05 19:20:07', NULL),
+(707, '707', 'Available', 'Normal', '2024-03-05 19:20:07', '2024-03-05 19:20:07', NULL),
+(708, '708', 'Available', 'Normal', '2024-03-05 19:20:27', '2024-03-05 19:20:27', NULL),
+(709, '709', 'Available', 'Big', '2024-02-27 12:47:41', '2024-02-27 13:05:23', NULL),
+(710, '710', 'Maintain', 'Big', '2024-02-27 12:48:17', '2024-03-04 18:41:34', 'bad lights'),
+(711, '711', 'Available', 'Normal', '2024-03-05 19:20:27', '2024-03-05 19:20:27', NULL);
 
 -- --------------------------------------------------------
 
@@ -157,7 +158,7 @@ ALTER TABLE `bookings`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=711;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=712;
 
 --
 -- AUTO_INCREMENT for table `users`

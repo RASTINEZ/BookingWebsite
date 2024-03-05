@@ -8,6 +8,8 @@
   margin-top: 20px; /* Add some top margin to separate the cards from the navbar */
 }
 
+
+
 .card {
   flex: 0 0 calc(20% - 20px); /* Calculate the width for maximum of 5 cards per row */
   /* Adjust the width and margin as needed to fit the desired number of cards per row */
@@ -54,6 +56,20 @@
 .maintain-rooms-list li span.details {
   font-size: larger; /* Increase font size for the details */
   font-weight: bold; /* Make the text bold */
+}
+/* CSS */
+.navbar {
+  position: fixed; /* Fixed positioning */
+  top: 0; /* Stick to the top of the viewport */
+  width: 100%; /* Take up the full width of the viewport */
+  z-index: 1000; /* Ensure the navbar appears above other content */
+  background-color: #fff; /* Background color for the navbar */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for depth */
+}
+
+/* Optional: Add padding to the body to prevent content from being obscured by the fixed navbar */
+body {
+  padding-top: 64px; /* Adjust according to the height of your navbar */
 }
 
 
