@@ -63,7 +63,7 @@ useEffect(() => {
       <NavBar username={username} />
       <div className="container">
         <h2>Register</h2>
-        {error && <div className="alert alert-danger">{error}</div>}
+        
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="username">
             <Form.Label>Username</Form.Label>
@@ -107,7 +107,16 @@ useEffect(() => {
         </Form>
         <p className="mt-3">
           Already have an account? <Link to="/login">Login</Link>
+          {error && <div className="alert alert-danger"style={{ 
+       
+       padding: '20px', 
+       margin: '20px', // Change this line
+       width: '100%', // Add this line
+       
+       
+     }}>{error}</div>}
         </p>
+        
       </div>
     </div>
   );
