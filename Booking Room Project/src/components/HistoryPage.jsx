@@ -101,7 +101,7 @@ const HistoryPage = () => {
               <strong>Room:</strong> {booking.room_id}<br />
               <strong>Date & Time:</strong> {booking.start_time} - {booking.end_time}
               <br />
-              <button onClick={() => cancelBooking(booking.booking_id)}>Cancel Booking</button><br /> <br />
+              <button className="custom-button" onClick={() => cancelBooking(booking.booking_id)}>Cancel Booking</button><br /> <br />
             </li>
           ))}
         </ul>

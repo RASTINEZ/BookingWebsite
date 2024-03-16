@@ -12,6 +12,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import AdminPage from './components/AdminPage.jsx'
 
 
 
@@ -35,12 +36,16 @@ const router = createBrowserRouter([
     element: <Register/>,
   },
   {
-    path: "Schedule/:roomId",
+    path: "Schedule/:roomId", //"Schedule/:roomId"
     element: <Schedule/>,
   },
   {
     path: "HistoryPage/:username",
     element: <HistoryPage/>,
+  },
+  {
+    path: "AdminPage",
+    element: <AdminPage/>,
   },
   
 

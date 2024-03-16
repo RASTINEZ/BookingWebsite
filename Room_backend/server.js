@@ -1,10 +1,14 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 const app = express();
 app.use(cors());
 app.use(express.json()); // Middleware to parse JSON bodies
+const bodyParser = require('body-parser');
+const adminRoutes = require('./adminRoutes');
+
 
 const db = mysql.createConnection({
     host: "localhost",
@@ -18,6 +22,18 @@ const db = mysql.createConnection({
 // Retrieve all users
 app.get('/users', (req, res) => {
     const sql = "SELECT * FROM users";
+    db.query(sql, (err, data) => {
+        if (err) {
+            console.error('Error fetching users:', err);
+            return res.status(500).json({ error: 'An error occurred while fetching users' });
+        }
+        return res.json(data);
+    });
+});
+
+// Retrieve all bookings
+app.get('/bookings', (req, res) => {
+    const sql = "SELECT * FROM bookings";
     db.query(sql, (err, data) => {
         if (err) {
             console.error('Error fetching users:', err);
@@ -143,29 +159,124 @@ app.get('/schedule/:roomId', (req, res) => {
     });
 });
 
-
+// Import the email service module
+const { sendEmail } = require('./emailService');
+const { sendEmail2 } = require('./emailService');
   
 // Endpoint to add bookings to the database
 app.post('/bookings', (req, res) => {
     const { roomId, date, selectedSlots, username } = req.body;
 
-    // Validate incoming data
+    // Retrieve user's role based on the username
+    const getRoleSql = "SELECT role FROM users WHERE username = ?";
+    db.query(getRoleSql, [username], (roleErr, roleResults) => {
+        if (roleErr) {
+            console.error('Error fetching user role:', roleErr);
+            return res.status(500).json({ error: 'An error occurred while fetching user role' });
+        }
+        if (roleResults.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        const userRole = roleResults[0].role;
 
-    // Insert bookings into the database
-    const sql = "INSERT INTO bookings (room_id, start_time, end_time, booked_by) VALUES (?, ?, ?, ?)";
-    selectedSlots.forEach(slot => {
-        db.query(sql, [roomId, `${date} ${slot.startTime}`, `${date} ${slot.endTime}`, username], (err, result) => {
-            if (err) {
-                console.error('Error inserting booking:', err);
-                return res.status(500).json({ error: 'An error occurred while inserting booking' });
+        // Insert bookings into the database
+        const insertSql = "INSERT INTO bookings (room_id, start_time, end_time, booked_by, status) VALUES (?, ?, ?, ?, ?)";
+        selectedSlots.forEach(slot => {
+            let status = 'Pending';
+            if (userRole === 'teacher' || userRole === 'admin') {
+                status = 'Confirmed';
             }
-            console.log('Booking inserted successfully');
-        });
-    });
+            db.query(insertSql, [roomId, `${date} ${slot.startTime}`, `${date} ${slot.endTime}`, username, status], (insertErr, result) => {
+                if (insertErr) {
+                    console.error('Error inserting booking:', insertErr);
+                    return res.status(500).json({ error: 'An error occurred while inserting booking' });
+                }
+                console.log('Booking inserted successfully');
 
-    res.status(200).json({ message: 'Bookings added successfully' });
+                // Retrieve user's email based on the username
+                const getEmailSql = "SELECT email FROM users WHERE username = ?";
+                db.query(getEmailSql, [username], (emailErr, emailResults) => {
+                    if (emailErr) {
+                        console.error('Error fetching user email:', emailErr);
+                        return res.status(500).json({ error: 'An error occurred while fetching user email' });
+                    }
+                    if (emailResults.length === 0) {
+                        return res.status(404).json({ error: 'User email not found' });
+                    }
+                    const userEmail = emailResults[0].email;
+
+                    // Send email after booking is successfully created
+                    sendEmail(userEmail, username, roomId, slot.startTime, slot.endTime, status);
+                });
+            });
+        });
+
+        res.status(200).json({ message: 'Bookings added successfully' });
+    });
 });
 
+// Endpoint to add bookings to the database
+app.post('/bookings2', (req, res) => {
+    const { roomId, date, selectedSlots, username } = req.body;
+
+    // Retrieve user's role based on the username
+    const getRoleSql = "SELECT role FROM users WHERE username = ?";
+    db.query(getRoleSql, [username], (roleErr, roleResults) => {
+        if (roleErr) {
+            console.error('Error fetching user role:', roleErr);
+            return res.status(500).json({ error: 'An error occurred while fetching user role' });
+        }
+        if (roleResults.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        const userRole = roleResults[0].role;
+
+        // Insert bookings into the database
+        const insertSql = "INSERT INTO bookings (room_id, start_time, end_time, booked_by, status) VALUES (?, ?, ?, ?, ?)";
+        selectedSlots.forEach(slot => {
+            let status = 'Pending';
+            if (userRole === 'teacher' || userRole === 'admin') {
+                status = 'Confirmed';
+            }
+            db.query(insertSql, [roomId, `${date} ${slot.startTime}`, `${date} ${slot.endTime}`, username, status], (insertErr, result) => {
+                if (insertErr) {
+                    console.error('Error inserting booking:', insertErr);
+                    return res.status(500).json({ error: 'An error occurred while inserting booking' });
+                }
+                console.log('Booking inserted successfully');
+
+                // Retrieve user's email based on the username
+                const getEmailSql = "SELECT email FROM users WHERE username = ?";
+                db.query(getEmailSql, [username], (emailErr, emailResults) => {
+                    if (emailErr) {
+                        console.error('Error fetching user email:', emailErr);
+                        return res.status(500).json({ error: 'An error occurred while fetching user email' });
+                    }
+                    if (emailResults.length === 0) {
+                        return res.status(404).json({ error: 'User email not found' });
+                    }
+                    const userEmail = emailResults[0].email;
+
+                    // Send email after booking is successfully created
+                    sendEmail2(userEmail, username, roomId, date, slot.startTime, slot.endTime, status);
+                });
+            });
+        });
+
+        res.status(200).json({ message: 'Bookings added successfully' });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+  
 
 app.get('/bookingHistory', (req, res) => {
     const { username } = req.query;
@@ -179,6 +290,8 @@ app.get('/bookingHistory', (req, res) => {
         return res.json(results);
     });
 });
+
+
 
 
 
@@ -204,13 +317,58 @@ app.delete('/cancelBooking/:bookingId', (req, res) => {
   });
 });
 
+// Backend route to update booking status
+app.put('/bookings/:bookingId', (req, res) => {
+    const { bookingId } = req.params;
+    const newStatus = req.body.status; // Access newStatus directly from req.body
+
+    // Update the status of the booking in the database
+    // Example SQL query: UPDATE bookings SET status = ? WHERE booking_id = ?
+    db.query('UPDATE bookings SET status = ? WHERE booking_id = ?', [newStatus, bookingId], (err, result) => {
+        if (err) {
+            console.error('Error updating booking status:', err);
+            return res.status(500).json({ error: 'An error occurred while updating booking status' });
+        }
+        
+        // Get the booking details from the database
+        const getBookingSql = "SELECT * FROM bookings WHERE booking_id = ?";
+        db.query(getBookingSql, [bookingId], (getBookingErr, bookingData) => {
+            if (getBookingErr) {
+                console.error('Error fetching booking details:', getBookingErr);
+                return res.status(500).json({ error: 'An error occurred while fetching booking details' });
+            }
+            if (bookingData.length === 0) {
+                return res.status(404).json({ error: 'Booking not found' });
+            }
+            
+            const { booked_by, room_id, start_time, end_time } = bookingData[0];
+            
+            // Retrieve user's email based on the booked_by username
+            const getUserEmailSql = "SELECT email FROM users WHERE username = ?";
+            db.query(getUserEmailSql, [booked_by], (getUserEmailErr, userEmailData) => {
+                if (getUserEmailErr) {
+                    console.error('Error fetching user email:', getUserEmailErr);
+                    return res.status(500).json({ error: 'An error occurred while fetching user email' });
+                }
+                if (userEmailData.length === 0) {
+                    return res.status(404).json({ error: 'User not found' });
+                }
+                const userEmail = userEmailData[0].email;
+                
+                // Send email after updating booking status
+                sendEmail(userEmail, booked_by, room_id, start_time, end_time, newStatus);
+                
+                // Return success response if the status is updated and email is sent successfully
+                return res.status(200).json({ message: 'Booking status updated successfully and email sent' });
+            });
+        });
+    });
+});
 
 
 
 
- 
-  
-  
+
 
 // Endpoint to get rooms in 'maintain' status
 app.get('/maintain', (req, res) => {
@@ -223,6 +381,57 @@ app.get('/maintain', (req, res) => {
         return res.json(data);
     });
 });
+
+// Function to handle deletion of a booking
+const deleteBooking = (req, res) => {
+    const { bookingId } = req.params;
+
+    // Perform the deletion logic in the database
+    // Example SQL query: DELETE FROM bookings WHERE booking_id = ?
+    db.query('DELETE FROM bookings WHERE booking_id = ?', [bookingId], (err, result) => {
+        if (err) {
+            console.error('Error deleting booking:', err);
+            return res.status(500).json({ error: 'An error occurred while deleting booking' });
+        }
+        // Check if the booking was found and deleted
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+        // Booking successfully deleted
+        return res.status(200).json({ message: 'Booking deleted successfully' });
+    });
+};
+
+// Update user role based on username
+app.put('/users/:username/update-role', (req, res) => {
+    const { username } = req.params;
+    const { newRole } = req.body;
+
+    // Logic to update user role based on username
+    // Example SQL query: UPDATE users SET role = ? WHERE username = ?
+    db.query('UPDATE users SET role = ? WHERE username = ?', [newRole, username], (err, result) => {
+        if (err) {
+            console.error('Error updating user role:', err);
+            return res.status(500).json({ error: 'An error occurred while updating user role' });
+        }
+        // Check if the user was found and role was updated
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'User not found or role not updated' });
+        }
+        // User role successfully updated
+        return res.status(200).json({ message: 'User role updated successfully' });
+    });
+});
+
+
+
+
+// Route to delete a booking
+app.delete('/bookings/:bookingId', deleteBooking);
+
+
+// Mount admin routes
+app.use('/admin', adminRoutes);
 
 
 

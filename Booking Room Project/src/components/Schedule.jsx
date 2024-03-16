@@ -100,7 +100,7 @@ const Schedule = ({}) => {
 };
 
 const addBookings = () => {
-  fetch('http://localhost:8081/bookings', {
+  fetch('http://localhost:8081/bookings2', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ const addBookings = () => {
       }
       console.log('Bookings added successfully');
       setBookingSuccess(true); // Set booking success state to true
-      alert('Booking successful');
+      alert('Booking successful \n Please check your email for details');
       setTimeout(() => {
         // Redirect to home page after 1.5 seconds
         navigate('/');
@@ -152,13 +152,13 @@ const addBookings = () => {
 
             {/* Button to add selected time slots (conditionally rendered) */}
             {selectedSlots.length > 0 && (
-            <button onClick={addBookings}>Add Bookings</button>
+            <button className='blue-button' onClick={addBookings}>Confirm Bookings</button>
             )}
               
           </ul>
         </div>
         <h3>Available Time Slots for {moment(date).format('YYYY-MM-DD')} (Asia/Bangkok Time)</h3>
-        <table className="table">
+        <table >
           <thead>
             <tr>
               <th>Time</th>
@@ -182,9 +182,9 @@ const addBookings = () => {
                         selectedSlot.startTime === slot.startTime &&
                         selectedSlot.endTime === slot.endTime
                     ) ? (
-                      <button onClick={() => handleRemoveBooking(slot)}>Cancel</button>
+                      <button className='yellow-button' onClick={() => handleRemoveBooking(slot)}>Cancel</button>
                     ) : (
-                      <button onClick={() => handleBooking(slot)}>Book</button>
+                      <button className='custom-button' onClick={() => handleBooking(slot)}>Book</button>
                     )
                   ) : (
                     <button disabled>Unavailable</button>

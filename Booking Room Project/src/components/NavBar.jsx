@@ -3,19 +3,8 @@ import React, { useState, useEffect } from 'react';
 
 const NavBar = ({username}) => {
   const navigate  = useNavigate();
-  const handleLogout = () => {
-    localStorage.removeItem('username');    
-    setUsername(null); // Update state in App component (if applicable)
-    // Optionally redirect to the login page:
-    alert('Logout successful'); // Show success message as alert
-    setTimeout(() => {
-        navigate('/'); // Use navigate directly
-    }, 1000);
 
-     // Or use useNavigate() if you have it set up
-
-    window.location.reload();
-  };
+  
 
   const [storedUsername, setUsername] = useState(null);
   useEffect(() => { 
@@ -23,6 +12,18 @@ const NavBar = ({username}) => {
     setUsername(storedUsername); 
   }, []); // Run the effect only once on component mount
 
+  const handleLogout = () => {
+    localStorage.removeItem('username');    
+    setUsername(null); // Update state in App component (if applicable)
+    // Optionally redirect to the login page:
+    alert('Logout successful'); // Show success message as alert
+    navigate('/');
+    
+
+     // Or use useNavigate() if you have it set up
+
+    window.location.reload();
+  };
 
   return (
         <nav className="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
@@ -42,10 +43,10 @@ const NavBar = ({username}) => {
         
         {!username && ( <> 
         <li className="nav-item">
-          <a className="nav-link active" href="Login">&nbsp;&nbsp;Login</a>
+          <a className="nav-link active" href="/Login">&nbsp;&nbsp;Login</a>
         </li>
         <li className="nav-item">
-          <a className="nav-link active" href="Register">&nbsp;&nbsp;Register</a>
+          <a className="nav-link active" href="/Register">&nbsp;&nbsp;Register</a>
         </li>
         </> )}
         
@@ -59,6 +60,14 @@ const NavBar = ({username}) => {
 
            <a className="nav-link active" href={`/historypage/${username}`}>Booking History</a>
         </li>
+      </>
+    )}
+    {(username === "admin" || username === "rastin")  && (
+      <> 
+        
+
+           <a className="nav-link active" href="/AdminPage">Admin Page</a>
+        
       </>
     )}
 

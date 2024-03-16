@@ -71,5 +71,83 @@
 body {
   padding-top: 64px; /* Adjust according to the height of your navbar */
 }
+.admin-container {
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd; /* Border for the entire table */
+  margin-right: 20px; /* Add right margin to create space */
+  margin-left: 20px; /* Add right margin to create space */
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #deeed4; /* Background color for table headers */
+}
+
+tr:nth-child(even) {
+  background-color: #f4f7ed; /* Alternate row background color */
+}
+
+
+/* Define a new button style */
+.custom-button {
+  background-color: #007bff; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+}
+.red-button {
+  background-color: #e93636; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+}
+.green-button {
+  background-color: #4dd318; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+}
+.yellow-button {
+  background-color: #dfad0b; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+}
+.blue-button {
+  background-color: #001bb4; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+}
+
+/* Hover effect */
+.custom-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Button styles */
+
+
+
 
 
