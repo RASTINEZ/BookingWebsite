@@ -111,7 +111,7 @@ app.post('/login', (req, res) => {
 
 //Rooms endpoint
 app.get('/rooms', (re,res) => {
-    const sql = "SELECT * FROM rooms WHERE available_status = 'available'";
+    const sql = "SELECT * FROM rooms WHERE available_status = 'ready'";
     db.query(sql,(err, data) =>{
         if(err) return res.json(err);
         return res.json(data);

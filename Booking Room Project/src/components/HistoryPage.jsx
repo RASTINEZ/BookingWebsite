@@ -5,6 +5,11 @@ const HistoryPage = () => {
   const [bookingHistory, setBookingHistory] = useState([]);
   const [username, setUsername] = useState();
 
+  const [filterOption, setFilterOption] = useState('All'); // Default filter option
+  const [roomFilter, setRoomFilter] = useState(''); // Default room filter value
+  const [filteredHistory, setFilteredHistory] = useState([]);
+  
+
   useEffect(() => {
     const storedUsername = localStorage.getItem('username'); 
     console.log('Stored username:', storedUsername); // Check if username is retrieved
@@ -14,6 +19,13 @@ const HistoryPage = () => {
       fetchBookingHistory(storedUsername);
     }
   }, []);
+
+
+  useEffect(() => {
+    filterHistory();
+  }, [bookingHistory, filterOption, roomFilter]);
+
+
   
   const fetchBookingHistory = (username) => {
     const url = `http://localhost:8081/bookingHistory?username=${username}`;
@@ -57,29 +69,38 @@ const HistoryPage = () => {
         console.error('Error cancelling booking:', error);
         // Handle cancellation error
       });
+
   };
 
- 
-
- 
-
+  const filterHistory = () => {
+    let filtered = bookingHistory;
   
-
+    if (filterOption !== 'All') {
+      filtered = filtered.filter(booking => booking.status === filterOption);
+    }
   
-
-  const formatDateAndTime = (dateTimeString) => {
-    const date = new Date(dateTimeString);
-    const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-    return `${formattedDate} ${formattedTime}`;
+    if (roomFilter !== '') {
+      // Convert room_id to string and then apply toLowerCase()
+      const roomFilterLower = roomFilter.toLowerCase();
+      filtered = filtered.filter(booking => `${booking.room_id}`.toLowerCase().includes(roomFilterLower));
+    }
+  
+    setFilteredHistory(filtered);
   };
   
-
   
-
   
+    const formatDateAndTime = (dateTimeString) => {
+      const date = new Date(dateTimeString);
+      const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      return `${formattedDate} ${formattedTime}`;
+    };
+
+
 
   return (
+    
     <div>
       <NavBar username={username} />
       
@@ -92,8 +113,13 @@ const HistoryPage = () => {
       
     }} >
         <h2>Booking History</h2><br />
+        
         <ul>
-          {bookingHistory.map((booking, index) => (
+        <div style={{ margin: '30px auto', width: '80%', display: 'flex',}}>
+          <label htmlFor="filterRoom">Filter by Room:&nbsp;&nbsp; </label>
+          <input type="text" id="filterRoom" value={roomFilter} onChange={(e) => setRoomFilter(e.target.value)} />
+        </div>
+          {filteredHistory.map((booking, index) => (
             
             <li key={index}>
               <strong>{index+1} . </strong><br />

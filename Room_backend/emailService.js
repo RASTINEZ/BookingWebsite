@@ -37,10 +37,10 @@ const formatTime = (timeString) => {
 const sendEmail = (email, username, room_Id, start_Time, end_Time, status) => {
   // Example email options
   const mailOptions = {
-    from: 'kuroomservice@hotmail.com',
+    from: '"KU Room Service" <kuroomservice@hotmail.com>',
     to: email,
     subject: 'Booking Confirmation',
-    text: `Hello ${username},\n\nYour booking status is:${status} for Room ${room_Id} from ${formatDateAndTime(start_Time)} to ${formatDateAndTime(end_Time)}.`,
+    text: `Hello ${username},\n\nYour booking status is: ${status} for Room ${room_Id} from ${formatDateAndTime(start_Time)} to ${formatDateAndTime(end_Time)}.`,
   };
 
   // Send email
@@ -62,10 +62,10 @@ const sendEmail2 = (email, username, room_Id, date, start_Time, end_Time, status
  
   // Example email options
   const mailOptions = {
-    from: 'kuroomservice@hotmail.com',
+    from: '"KU Room Service" <kuroomservice@hotmail.com>',
     to: email,
     subject: 'Booking Confirmation',
-    text: `Hello ${username},\n\nYour booking status is:${status} for Room ${room_Id} from ${formatDate(date)}${formatTime(start_Time)} to ${formatDate(date)}${formatTime(end_Time)}.`,
+    text: `Hello ${username},\n\nYour booking status is: ${status} for Room ${room_Id} from ${formatDate(date)}${formatTime(start_Time)} to ${formatDate(date)}${formatTime(end_Time)}.`,
   };
 
   // Send email

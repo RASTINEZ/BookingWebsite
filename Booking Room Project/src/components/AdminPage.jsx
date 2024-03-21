@@ -8,6 +8,10 @@ const AdminPage = () => {
   const [username, setUsername] = useState();
   const [forceUpdate, setForceUpdate] = useState(false); 
 
+  const [filterOption, setFilterOption] = useState('All'); // Default filter option
+  const [roomFilter, setRoomFilter] = useState(''); // Default room filter value
+  const [filteredHistory, setFilteredHistory] = useState([]);
+
   useEffect(() => {
     fetchUsers();
     fetchBookings();
@@ -17,6 +21,27 @@ const AdminPage = () => {
   
     
   }, [[forceUpdate]]);
+
+  useEffect(() => {
+    filterHistory();
+  }, [bookings, filterOption, roomFilter]);
+
+  const filterHistory = () => {
+    let filtered = bookings;
+  
+    if (filterOption !== 'All') {
+      
+      filtered = filtered.filter(booking => booking.status === filterOption);
+    }
+  
+    if (roomFilter !== '') {
+      // Convert room_id to string and then apply toLowerCase()
+      const roomFilterLower = roomFilter.toLowerCase();
+      filtered = filtered.filter(booking => `${booking.room_id}`.toLowerCase().includes(roomFilterLower));
+    }
+  
+    setFilteredHistory(filtered);
+  };
 
   const fetchUsers = () => {
     axios.get('http://localhost:8081/admin/users')
@@ -172,10 +197,33 @@ return (
   
       {/* Add space between tables */}
       <div style={{ marginBottom: '20px' }}></div>
+
+      {/* filter seach bar  */}
+      <div style={{ margin: '30px auto', width: '80%', display: 'flex', justifyContent: 'flex-end', marginRight: '200px'}}>
+
+        <label htmlFor="filterStatus">Filter by Status:&nbsp;&nbsp;</label>
+          <select id="filterStatus" value={filterOption} onChange={(e) => setFilterOption(e.target.value)}>
+            <option value="All">All</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="pending">Pending</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          &nbsp;&nbsp;
+
+
+          <label htmlFor="filterRoom">Filter by Room:&nbsp;&nbsp; </label>
+          <input type="text" id="filterRoom" value={roomFilter} onChange={(e) => setRoomFilter(e.target.value)} />
+
+        </div>
+
+        
   
       <div className="admin-container">
         <h2>Booking List&nbsp;&nbsp;</h2>
+        
+
         <table>
+          
           <thead>
             <tr>
               <th>No.</th>
@@ -189,7 +237,9 @@ return (
             </tr>
           </thead>
           <tbody>
-            {bookings.map((booking, index) => (
+          
+
+            {filteredHistory.map((booking, index) => (
               <tr key={booking.booking_id}>
                 <td>{index + 1}</td> {/* Counter */}
                 <td>{booking.booking_id}</td>
@@ -201,7 +251,8 @@ return (
                 <td>
                   <button className="green-button" onClick={() => handleStatusChange(booking.booking_id, 'confirmed')}>Confirm</button>&nbsp;&nbsp;
                   <button className="yellow-button" onClick={() => handleStatusChange(booking.booking_id, 'rejected')}>Reject</button>&nbsp;&nbsp;
-                  <button className="red-button" onClick={() => handleDeleteBooking(booking.booking_id)}>Delete</button>
+                  {/* delete button
+                  <button className="red-button" onClick={() => handleDeleteBooking(booking.booking_id)}>Delete</button> */}
                 </td>
               </tr>
             ))}
