@@ -81,7 +81,7 @@ const formatDateAndTime = (dateTimeString) => {
 
 return (
     <div>
-      <NavBar username={username} />
+      
       <div className="admin-container">
         <h2>User List&nbsp;&nbsp;</h2>
         <table>
@@ -89,6 +89,8 @@ return (
             <tr>
               <th>User ID</th>
               <th>Username</th>
+              <th>First name</th>
+              <th>Last name</th>
               <th>Email</th>
               <th>Role</th>
               <th>Action</th>
@@ -99,6 +101,8 @@ return (
               <tr key={user.id}>
                 <td>{user.id}</td>
                 <td>{user.username}</td>
+                <td>{user.first_name}</td>
+                <td>{user.last_name}</td>
                 <td>{user.email}</td>
                 <td>{user.role}</td>
                 <td>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2024 at 05:07 AM
+-- Generation Time: Mar 24, 2024 at 08:50 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -138,23 +138,27 @@ CREATE TABLE `users` (
   `username` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('user','teacher','mod','admin') DEFAULT 'user'
+  `role` enum('user','teacher','mod','admin') DEFAULT 'user',
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`) VALUES
-(1, 'test', 'test@gmail.com', '11111111', 'teacher'),
-(2, 'test2', 'test@gmail.com', '22222222', 'user'),
-(3, 'test3', 'test3@gmail.com', '33333333', 'admin'),
-(4, 'test4', 'test4@gmail.com', '44444444', 'mod'),
-(5, 'test5', 'test5@gmail.com', '55555555', 'teacher'),
-(6, 'test6', 's6@gmail.com', '55555555', 'user'),
-(7, 'test7', 's7@gmail.com', '77777777', 'user'),
-(8, 'rastin', 'rastinez1337@gmail.com', '12345678', 'admin'),
-(9, 'admin', 'tinrunner4869@gmail.com', 'admin12345', 'admin');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `first_name`, `last_name`) VALUES
+(1, 'test', 'test@gmail.com', '11111111', 'teacher', NULL, NULL),
+(2, 'test2', 'test@gmail.com', '22222222', 'user', NULL, NULL),
+(3, 'test3', 'test3@gmail.com', '33333333', 'admin', NULL, NULL),
+(4, 'test4', 'test4@gmail.com', '44444444', 'mod', NULL, NULL),
+(5, 'test5', 'test5@gmail.com', '55555555', 'teacher', NULL, NULL),
+(6, 'test6', 's6@gmail.com', '55555555', 'user', NULL, NULL),
+(7, 'test7', 's7@gmail.com', '77777777', 'user', NULL, NULL),
+(8, 'rastin', 'rastinez1337@gmail.com', '12345678', 'admin', NULL, NULL),
+(9, 'admin', 'tinrunner4869@gmail.com', 'admin12345', 'admin', 'admin', 'naja'),
+(11, 'tin', 'tin@gmail', '12345678', 'user', NULL, NULL),
+(12, 'kkk', '', '', 'user', 'kknuadmaew', '');
 
 --
 -- Indexes for dumped tables
@@ -199,7 +203,7 @@ ALTER TABLE `rooms`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables

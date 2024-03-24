@@ -13,6 +13,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import AdminPage from './components/AdminPage.jsx'
+import EditProfile from './components/EditProfile.jsx'
 
 
 
@@ -47,6 +48,11 @@ const router = createBrowserRouter([
     path: "AdminPage",
     element: <AdminPage/>,
   },
+  {
+    path: "EditProfile/:username",
+    element: <EditProfile/>,
+  },
+
   
 
 ]);

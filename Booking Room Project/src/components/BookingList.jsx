@@ -125,7 +125,7 @@ const formatDateAndTime = (dateTimeString) => {
 
 return (
     <div>
-      <NavBar username={username} />
+      
       <div style={{ margin: '30px auto', width: '80%', display: 'flex', justifyContent: 'flex-end', marginRight: '200px'}}>
         <label htmlFor="filterStatus">Filter by Status:&nbsp;&nbsp;</label>
         <select id="filterStatus" value={filterOption} onChange={(e) => setFilterOption(e.target.value)}>

@@ -31,6 +31,64 @@ app.get('/users', (req, res) => {
     });
 });
 
+app.get('/getname/:username', (req, res) => {
+    const { username } = req.params;
+    const sql = "SELECT first_name, last_name, role FROM users WHERE username = ?";
+    db.query(sql, [username], (err, result) => {
+      if (err) {
+        console.error('Error retrieving name:', err);
+        return res.status(500).json({ error: 'An error occurred while retrieving name' });
+      }
+      if (result.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      const { first_name, last_name, role } = result[0];
+      return res.status(200).json({ first_name, last_name, role });
+    });
+});
+
+// Retrieve user data
+app.get('/user', (req, res) => {
+    const { username } = req.query;
+    // Query the database to retrieve info for the specified username
+    const sql = "SELECT * FROM users WHERE username = ?";
+    db.query(sql, [username], (err, results) => {
+        if (err) {
+            console.error('Error fetching booking history:', err);
+            return res.status(500).json({ error: 'An error occurred while fetching booking history' });
+        }
+        return res.json(results);
+    });
+});
+  
+ // Update user data
+app.put('/user', (req, res) => {
+    const { username, firstName, lastName, email, password } = req.body;
+
+
+    // Update user data in the database based on the username
+    db.query('UPDATE users SET first_name = ?, last_name = ?, email = ?, password = ? WHERE username = ?', [firstName, lastName, email, password, username], (error, results) => {
+        if (error) {
+            console.error('Error updating user data:', error);
+            return res.status(500).json({ error: 'An error occurred while updating user data' });
+        }
+
+        // Check if any rows were affected by the update operation
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // User data updated successfully
+        res.json({ message: 'User data updated successfully' });
+    });
+});
+
+  
+  
+
+
+  
+
 // Retrieve all bookings
 app.get('/bookings', (req, res) => {
     const sql = "SELECT * FROM bookings";
@@ -45,7 +103,7 @@ app.get('/bookings', (req, res) => {
 
 // Registration endpoint
 app.post('/register', (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, firstName, lastName } = req.body;
     
     // Check if username already exists
     const checkUsernameQuery = "SELECT * FROM users WHERE username = ?";
@@ -72,8 +130,8 @@ app.post('/register', (req, res) => {
             }
 
             // Insert new user if username and email don't exist
-            const insertUserQuery = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-            db.query(insertUserQuery, [username, email, password], (insertErr, result) => {
+            const insertUserQuery = "INSERT INTO users (username, email, password, first_name, last_name) VALUES (?, ?, ?, ?, ?)";
+            db.query(insertUserQuery, [username, email, password, firstName, lastName], (insertErr, result) => {
                 if (insertErr) {
                     console.error('Error inserting user:', insertErr);
                     return res.status(500).json({ error: 'An error occurred during registration' });
@@ -84,6 +142,7 @@ app.post('/register', (req, res) => {
         });
     });
 });
+
 
 
 // Login endpoint

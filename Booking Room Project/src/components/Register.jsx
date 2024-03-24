@@ -4,11 +4,14 @@ import { Form, Button } from 'react-bootstrap';
 import NavBar from './NavBar';
 
 const Register = ({}) => {
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
+    firstName: '',
+    lastName: '',
   });
   const [error, setError] = useState('');
   const navigate  = useNavigate();
@@ -28,12 +31,20 @@ useEffect(() => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    // Check if any field is empty
+    for (const key in formData) {
+      if (formData[key] === '') {
+        setError('Please fill in all fields');
+        return;
+      }
+    }
+  
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-
+  
     try {
       const response = await fetch('http://localhost:8081/register', {
         method: 'POST',
@@ -42,55 +53,42 @@ useEffect(() => {
         },
         body: JSON.stringify(formData),
       });
-
+  
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error);
       }
-
+      setError('');
+  
       // Registration successful
       alert('Registration successful');
       setTimeout(() => {
         navigate('/login'); // Use navigate directly
-      }, 1000);
+      }, 500);
     } catch (err) {
       setError(err.message);
     }
   };
+  
 
   return (
     <div>
       <NavBar username={username} />
       <div className="container">
         <h2>Register</h2>
-        
+
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="username">
             <Form.Label>Username</Form.Label>
-            <Form.Control
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-            />
+            <Form.Control type="text" name="username" value={formData.username} onChange={handleChange} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="email">
             <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
+            <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="password">
             <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-            />
+            <Form.Control type="password" name="password" value={formData.password} onChange={handleChange} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="confirmPassword">
             <Form.Label>Confirm Password</Form.Label>
@@ -101,22 +99,33 @@ useEffect(() => {
               onChange={handleChange}
             />
           </Form.Group>
+          <Form.Group className="mb-3" controlId="firstName">
+            <Form.Label>First Name</Form.Label>
+            <Form.Control type="text" name="firstName" value={formData.firstName} onChange={handleChange} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="lastName">
+            <Form.Label>Last Name</Form.Label>
+            <Form.Control type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
+          </Form.Group>
           <Button variant="primary" type="submit">
             Register
           </Button>
         </Form>
         <p className="mt-3">
           Already have an account? <Link to="/login">Login</Link>
-          {error && <div className="alert alert-danger"style={{ 
-       
-       padding: '20px', 
-       margin: '20px', // Change this line
-       width: '100%', // Add this line
-       
-       
-     }}>{error}</div>}
+          {error && (
+            <div
+              className="alert alert-danger"
+              style={{
+                padding: '20px',
+                margin: '20px',
+                width: '100%',
+              }}
+            >
+              {error}
+            </div>
+          )}
         </p>
-        
       </div>
     </div>
   );

@@ -4,14 +4,30 @@ import React, { useState, useEffect } from 'react';
 const NavBar = ({username}) => {
   const navigate  = useNavigate();
 
-  
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [role, setRole] = useState('');
 
   const [storedUsername, setUsername] = useState(null);
+
+  
+
+    
   useEffect(() => { 
     const storedUsername = localStorage.getItem('username');
-    setUsername(storedUsername); 
-  }, []); // Run the effect only once on component mount
-
+    if (storedUsername) {
+      setUsername(storedUsername);
+      getName(storedUsername)
+        .then(data => {
+          setFirstName(data.first_name);
+          setLastName(data.last_name);
+          setRole(data.role);
+        })
+        .catch(error => {
+          console.error('Failed to retrieve name:', error);
+        });
+    }
+  }, []);
   const handleLogout = () => {
     localStorage.removeItem('username');    
     setUsername(null); // Update state in App component (if applicable)
@@ -24,6 +40,38 @@ const NavBar = ({username}) => {
 
     window.location.reload();
   };
+
+  // Function to retrieve the name from the backend
+const getName = async (storedUsername) => {
+  try {
+    const response = await fetch(`http://localhost:8081/getname/${storedUsername}`);
+    if (!response.ok) {
+      throw new Error('Failed to retrieve name');
+    }
+    const data = await response.json();
+    return data; // This will contain first_name and last_name
+  } catch (error) {
+    console.error('Error retrieving name:', error);
+    // Handle error
+  }
+};
+
+// Usage example
+
+if (storedUsername) {
+  getName(storedUsername)
+    .then(data => {
+      console.log('Retrieved name:', data.first_name, data.last_name);
+      // Use the retrieved name as needed
+    })
+    .catch(error => {
+      console.error('Failed to retrieve name:', error);
+    });
+} else {
+  console.error('Username not found in local storage');
+  // Handle the case where the username is not found in local storage
+}
+
 
   return (
         <nav className="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
@@ -53,16 +101,20 @@ const NavBar = ({username}) => {
         {username && (
       <> 
         <li className="nav-item">
-          <span className="nav-link active">Welcome, {username}!</span>
+          <span className="nav-link active">Welcome, {firstName} !</span>
         </li>
         <li className="nav-item">
-           <button className="btn btn-link" onClick={handleLogout}>Logout</button> {/* Or style it according to your preferences */}
 
-           <a className="nav-link active" href={`/historypage/${username}`}>Booking History</a>
+           
+           <a className="nav-link edit-profile" href={`/EditProfile/${username}`}>&nbsp;&nbsp;Edit Profile</a>
+
+           <a className="nav-link booking-history" href={`/historypage/${username}`}>&nbsp;&nbsp;Booking History</a>
+           <button className="btn btn-link custom-logout-btn" onClick={handleLogout} >Logout</button> {/* Or style it according to your preferences */}
+
         </li>
       </>
     )}
-    {(username === "admin" || username === "rastin")  && (
+    {(role === "admin" || role === "mod")  && (
       <> 
         
 
