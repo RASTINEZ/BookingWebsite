@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NavBar from './NavBar';
+import axios from 'axios';
 
 const HistoryPage = () => {
   const [bookingHistory, setBookingHistory] = useState([]);
@@ -90,12 +91,38 @@ const HistoryPage = () => {
   
   
   
-    const formatDateAndTime = (dateTimeString) => {
-      const date = new Date(dateTimeString);
-      const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-      const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-      return `${formattedDate} ${formattedTime}`;
-    };
+  const formatDateAndTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    return `${formattedDate} ${formattedTime}`;
+  };
+
+
+  const handleCheckIn = (bookingId) => {
+    const isConfirmed = window.confirm("Are you sure you want to check in for this booking?");
+    if (!isConfirmed) {
+        // If the user cancels, do nothing
+        return;
+    }
+
+    // Send a request to update the check-in status to 'yes'
+    axios.put(`http://localhost:8081/checkinBooking/${bookingId}`)
+        .then(response => {
+            // Update local state or perform any necessary actions
+            alert('Check-in successful');
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error checking in:', error);
+            // Handle error or display error message
+            alert('Error checking in. Please try again later.');
+        });
+};
+
+
+
 
 
 
@@ -125,9 +152,16 @@ const HistoryPage = () => {
               <strong>{index+1} . </strong><br />
               <strong>Booking ID:</strong> {booking.booking_id}<br />
               <strong>Room:</strong> {booking.room_id}<br />
-              <strong>Date & Time:</strong> {booking.start_time} - {booking.end_time}
-              <br />
-              <button className="custom-button" onClick={() => cancelBooking(booking.booking_id)}>Cancel Booking</button><br /> <br />
+              <strong>Date & Time:</strong> {booking.start_time} - {booking.end_time}<br />
+              <strong>Check in: </strong> {booking.check_in} <br />
+              
+              {booking.check_in === 'no' && (
+
+                <button className="checkin-blue-button" onClick={() => handleCheckIn(booking.booking_id)}>Check In</button>
+              )}
+              
+              <br /> <button className="yellow-button" onClick={() => cancelBooking(booking.booking_id)}>Cancel Booking</button><br /> <br />
+              
             </li>
           ))}
         </ul>

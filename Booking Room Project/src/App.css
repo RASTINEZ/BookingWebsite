@@ -74,6 +74,11 @@ body {
 .admin-container {
   display: flex;
   justify-content: center;
+  text-align: center;
+}
+.select-option {
+  margin-top: 10px;
+  margin-left: 20px;
 }
 
 table {
@@ -106,6 +111,7 @@ tr:nth-child(even) {
   border: none; /* Remove border */
   border-radius: 5px; /* Add rounded corners */
   cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
 }
 .red-button {
   background-color: #e93636; /* Blue background color */
@@ -114,6 +120,7 @@ tr:nth-child(even) {
   border: none; /* Remove border */
   border-radius: 5px; /* Add rounded corners */
   cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
 }
 .green-button {
   background-color: #4dd318; /* Blue background color */
@@ -122,6 +129,27 @@ tr:nth-child(even) {
   border: none; /* Remove border */
   border-radius: 5px; /* Add rounded corners */
   cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
+}
+.checkin-green-button {
+  background-color: #4dd318; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.checkin-blue-button {
+  background-color: #007bff; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 .yellow-button {
   background-color: #dfad0b; /* Blue background color */
@@ -130,6 +158,7 @@ tr:nth-child(even) {
   border: none; /* Remove border */
   border-radius: 5px; /* Add rounded corners */
   cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
 }
 .blue-button {
   background-color: #001bb4; /* Blue background color */
@@ -138,6 +167,7 @@ tr:nth-child(even) {
   border: none; /* Remove border */
   border-radius: 5px; /* Add rounded corners */
   cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
 }
 
 /* Hover effect */
@@ -145,7 +175,30 @@ tr:nth-child(even) {
   background-color: #0056b3; /* Darker blue on hover */
 }
 
-/* Button styles */
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup {
+  background-color: rgb(240, 202, 202);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup h3 {
+  margin-top: 0;
+}
+
+
 
 
 

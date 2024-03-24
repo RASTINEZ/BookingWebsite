@@ -34,13 +34,28 @@ const formatTime = (timeString) => {
 
 
 // Function to send booking confirmation email
-const sendEmail = (email, username, room_Id, start_Time, end_Time, status) => {
+const sendEmail = (email, username, room_Id, start_Time, end_Time, status, bookingId, detail) => {
+  // Example email options
+  let emailText = `Hello ${username},\n`;
+  
+  // Include booking details if status is "rejected"
+  // Include booking details if status is "rejected"
+  if (status === "rejected") {
+    emailText += `Your booking status is: ${status}\n`;
+    emailText += `Reason: ${detail}\n`;
+    emailText += `for Room ${room_Id} from ${formatDateAndTime(start_Time)} to ${formatDateAndTime(end_Time)}\n`;
+    emailText += `(Booking ID: ${bookingId})`;
+  } else {
+    emailText += `Your booking status is: ${status}\n`;
+    emailText += `for Room ${room_Id} from ${formatDateAndTime(start_Time)} to ${formatDateAndTime(end_Time)}\n`;
+    emailText += `(Booking ID: ${bookingId})`;
+  }
   // Example email options
   const mailOptions = {
     from: '"KU Room Service" <kuroomservice@hotmail.com>',
     to: email,
     subject: 'Booking Confirmation',
-    text: `Hello ${username},\n\nYour booking status is: ${status} for Room ${room_Id} from ${formatDateAndTime(start_Time)} to ${formatDateAndTime(end_Time)}.`,
+    text: emailText,
   };
 
   // Send email
@@ -55,17 +70,23 @@ const sendEmail = (email, username, room_Id, start_Time, end_Time, status) => {
   });
 };
 
-const sendEmail2 = (email, username, room_Id, date, start_Time, end_Time, status) => {
+const sendEmail2 = (email, username, room_Id, date, start_Time, end_Time, status, bookingId) => {
    // Log start_Time and end_Time
    console.log('start_Time:', start_Time);
    console.log('end_Time:', end_Time);
- 
+
+   let emailText = `Hello ${username},\n`;
+   emailText += `Your booking status is: ${status}\n`;
+   emailText += `for Room ${room_Id} from ${formatDate(date)}${formatTime(start_Time)} to ${formatDate(date)}${formatTime(end_Time)}\n`;
+   emailText += `(Booking ID: ${bookingId})`;
+
   // Example email options
   const mailOptions = {
     from: '"KU Room Service" <kuroomservice@hotmail.com>',
     to: email,
     subject: 'Booking Confirmation',
-    text: `Hello ${username},\n\nYour booking status is: ${status} for Room ${room_Id} from ${formatDate(date)}${formatTime(start_Time)} to ${formatDate(date)}${formatTime(end_Time)}.`,
+    text: emailText,
+    
   };
 
   // Send email
