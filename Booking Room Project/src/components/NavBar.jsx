@@ -74,7 +74,7 @@ if (storedUsername) {
 
 
   return (
-        <nav className="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+        <nav className="navbar custom-navbar" data-bs-theme="dark">
   <div className="container-fluid">
     <a className="navbar-brand" href="/">KU Room Service</a>
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">

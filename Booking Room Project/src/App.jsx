@@ -15,6 +15,7 @@ export const App = () => {
   const [filterOption, setFilterOption] = useState('All'); // Default filter option
   const [roomFilter, setRoomFilter] = useState(''); // Default room filter value
   const [filteredHistory, setFilteredHistory] = useState([]);
+  const [buildingFilter, setBuildingFilter] = useState('All'); // State variable for building filter
 
 
 
@@ -24,10 +25,8 @@ export const App = () => {
 
 
   useEffect(() => {
-    fetch('http://localhost:8081/rooms')
-    .then(res => res.json())
-    .then(data => setData(data))
-    .catch(err => console.log(err));
+    fetchRooms();
+    
 
     const storedUsername = localStorage.getItem('username'); 
     
@@ -47,6 +46,23 @@ export const App = () => {
   useEffect(() => {
     filterHistory();
   }, [data, filterOption, roomFilter]);
+
+
+  useEffect(() => {
+    fetchRooms();
+  }, [buildingFilter]);
+
+  const fetchRooms = () => {
+    fetch(`http://localhost:8081/rooms?building=${buildingFilter}`)
+      .then(res => res.json())
+      .then(data => setData(data))
+      .catch(err => console.log(err));
+  };
+
+  const handleBuildingChange = (e) => {
+    setBuildingFilter(e.target.value);
+  };
+
 
   const filterHistory = () => {
     let filtered = data;
@@ -70,8 +86,22 @@ export const App = () => {
 
 
   return (
-    <div>
+    <div >
       <NavBar username={username} />
+      {/* Building filter dropdown */}
+      <div style={{ margin: '30px auto', width: '80%', display: 'flex', textAlign: 'right', justifyContent: 'flex-end', marginRight: '200px' }}>
+        <label htmlFor="filterBuilding">Filter by Building:</label>
+        <select
+          id="filterBuilding"
+          value={buildingFilter}
+          onChange={handleBuildingChange}
+        >
+          <option value="All">All</option>
+          <option value="SC45">SC45</option>
+          <option value="SCL">SCL</option>
+        </select>
+      </div>
+
       {/* filter seach bar                                                                   //move to the right */}                                                              
       <div style={{ margin: '30px auto', width: '80%', display: 'flex', textAlign: 'right', justifyContent: 'flex-end', marginRight: '200px'}}>
           <label htmlFor="filterRoom">Filter by Room:&nbsp;&nbsp; </label>
@@ -85,7 +115,7 @@ export const App = () => {
           <Card
             key={index}
             title={`Room ${room.room_number}`}
-            content={`Size: ${room.room_type}  <br> Status:🟢${room.available_status} `}
+            content={`Building: ${room.building} <br> Size: ${room.room_type}  <br> Status:🟢${room.available_status} `}
             roomId={room.room_number} // Pass room_number as a prop to Card
             username={username}
             url={"https://previews.123rf.com/images/rilueda/rilueda1410/rilueda141000244/32842748-modern-lecture-room.jpg"}
@@ -109,7 +139,7 @@ export const App = () => {
           
           <li key={index}>
             
-            <span className="room">Room:</span>{room.room_number}
+            <span className="room">Room:</span>{room.room_number}({room.building})
 
 
             <span className="details"> Details:</span> {room.details}

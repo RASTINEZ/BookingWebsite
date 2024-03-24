@@ -6,7 +6,14 @@
   justify-content: center;
   gap: 20px; /* Adjust the gap between cards as needed */
   margin-top: 20px; /* Add some top margin to separate the cards from the navbar */
+  background-color: #cfe2f1; /* Replace with the color code you want */
 }
+
+.page-container {
+  background-color: #cfe2f1; /* Replace with the color code you want */
+  
+}
+
 
 
 
@@ -244,6 +251,10 @@ tr:nth-child(even) {
 .custom-logout-btn {
   color: #ff5733; /* Example custom logout button color */
 }
+.custom-navbar {
+  background-color: #000c52; /* Replace with the color code you want */
+}
+
 
 
 

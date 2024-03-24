@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2024 at 08:50 AM
+-- Generation Time: Mar 24, 2024 at 05:55 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -82,7 +82,7 @@ INSERT INTO `bookings` (`booking_id`, `room_id`, `start_time`, `end_time`, `book
 (55, 707, '2024-03-16 07:00:00', '2024-03-16 07:30:00', 'rastin', '2024-03-16 03:28:26', '2024-03-16 03:28:26', 'confirmed', 'no', NULL),
 (56, 706, '2024-03-17 07:00:00', '2024-03-17 07:30:00', 'admin', '2024-03-16 06:05:10', '2024-03-16 06:05:10', 'confirmed', 'no', NULL),
 (57, 708, '2024-03-16 08:00:00', '2024-03-16 08:30:00', 'admin', '2024-03-16 07:43:40', '2024-03-24 01:43:48', 'confirmed', 'yes', NULL),
-(58, 702, '2024-03-21 10:30:00', '2024-03-21 11:00:00', 'admin', '2024-03-21 08:36:22', '2024-03-24 03:55:35', 'confirmed', 'no', NULL),
+(58, 702, '2024-03-21 10:30:00', '2024-03-21 11:00:00', 'admin', '2024-03-21 08:36:22', '2024-03-24 16:43:07', 'confirmed', 'yes', NULL),
 (59, 707, '2024-03-21 07:00:00', '2024-03-21 07:30:00', 'admin', '2024-03-21 08:37:38', '2024-03-21 08:37:38', 'confirmed', 'no', NULL),
 (60, 702, '2024-03-21 07:30:00', '2024-03-21 08:00:00', 'admin', '2024-03-21 08:40:28', '2024-03-21 08:40:28', 'confirmed', 'no', NULL),
 (61, 709, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 01:15:52', '2024-03-24 01:15:52', 'confirmed', 'no', NULL),
@@ -90,7 +90,7 @@ INSERT INTO `bookings` (`booking_id`, `room_id`, `start_time`, `end_time`, `book
 (63, 711, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 01:29:48', '2024-03-24 01:43:57', 'rejected', 'yes', NULL),
 (64, 711, '2024-03-24 07:30:00', '2024-03-24 08:00:00', 'admin', '2024-03-24 02:29:09', '2024-03-24 02:29:09', 'confirmed', 'no', NULL),
 (65, 702, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 03:58:03', '2024-03-24 03:58:03', 'confirmed', 'no', NULL),
-(66, 701, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 03:59:12', '2024-03-24 03:59:12', 'confirmed', 'no', NULL),
+(66, 701, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 03:59:12', '2024-03-24 16:43:11', 'confirmed', 'yes', NULL),
 (67, 711, '2024-03-24 08:00:00', '2024-03-24 08:30:00', 'admin', '2024-03-24 04:04:12', '2024-03-24 04:04:12', 'confirmed', 'no', NULL),
 (68, 707, '2024-03-24 07:30:00', '2024-03-24 08:00:00', 'admin', '2024-03-24 04:05:02', '2024-03-24 04:05:02', 'confirmed', 'no', NULL);
 
@@ -107,25 +107,27 @@ CREATE TABLE `rooms` (
   `room_type` enum('Normal','Big') NOT NULL DEFAULT 'Normal',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `details` varchar(255) DEFAULT NULL
+  `details` varchar(255) DEFAULT NULL,
+  `building` enum('SC45','SCL') DEFAULT 'SC45'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `room_number`, `available_status`, `room_type`, `created_at`, `updated_at`, `details`) VALUES
-(701, '701', 'Ready', 'Normal', '2024-03-05 19:16:35', '2024-03-21 06:58:45', NULL),
-(702, '702', 'Ready', 'Normal', '2024-03-05 19:16:35', '2024-03-21 06:58:50', NULL),
-(703, '703', 'Maintain', 'Big', '2024-03-04 19:00:28', '2024-03-04 19:29:09', 'microphone broken, แอร์ไม่เย็น'),
-(704, '704', 'Ready', 'Normal', '2024-02-27 12:48:30', '2024-03-21 06:58:54', NULL),
-(705, '705', 'Ready', 'Normal', '2024-03-05 19:19:45', '2024-03-21 06:58:57', NULL),
-(706, '706', 'Ready', 'Normal', '2024-03-05 19:20:07', '2024-03-21 06:59:02', NULL),
-(707, '707', 'Ready', 'Normal', '2024-03-05 19:20:07', '2024-03-21 06:59:05', NULL),
-(708, '708', 'Ready', 'Normal', '2024-03-05 19:20:27', '2024-03-21 06:59:08', NULL),
-(709, '709', 'Ready', 'Big', '2024-02-27 12:47:41', '2024-03-21 06:59:12', NULL),
-(710, '710', 'Maintain', 'Big', '2024-02-27 12:48:17', '2024-03-04 18:41:34', 'bad lights'),
-(711, '711', 'Ready', 'Normal', '2024-03-05 19:20:27', '2024-03-21 06:59:16', NULL);
+INSERT INTO `rooms` (`id`, `room_number`, `available_status`, `room_type`, `created_at`, `updated_at`, `details`, `building`) VALUES
+(701, '701', 'Ready', 'Normal', '2024-03-05 19:16:35', '2024-03-21 06:58:45', NULL, 'SC45'),
+(702, '702', 'Ready', 'Normal', '2024-03-05 19:16:35', '2024-03-21 06:58:50', NULL, 'SC45'),
+(703, '703', 'Maintain', 'Big', '2024-03-04 19:00:28', '2024-03-04 19:29:09', 'microphone broken, แอร์ไม่เย็น', 'SC45'),
+(704, '704', 'Ready', 'Normal', '2024-02-27 12:48:30', '2024-03-21 06:58:54', NULL, 'SC45'),
+(705, '705', 'Ready', 'Normal', '2024-03-05 19:19:45', '2024-03-21 06:58:57', NULL, 'SC45'),
+(706, '706', 'Ready', 'Normal', '2024-03-05 19:20:07', '2024-03-21 06:59:02', NULL, 'SC45'),
+(707, '707', 'Ready', 'Normal', '2024-03-05 19:20:07', '2024-03-21 06:59:05', NULL, 'SC45'),
+(708, '708', 'Ready', 'Normal', '2024-03-05 19:20:27', '2024-03-21 06:59:08', NULL, 'SC45'),
+(709, '709', 'Ready', 'Big', '2024-02-27 12:47:41', '2024-03-21 06:59:12', NULL, 'SC45'),
+(710, '710', 'Maintain', 'Big', '2024-02-27 12:48:17', '2024-03-04 18:41:34', 'bad lights', 'SC45'),
+(711, '711', 'Ready', 'Normal', '2024-03-05 19:20:27', '2024-03-21 06:59:16', NULL, 'SC45'),
+(712, '303', 'Ready', 'Normal', '2024-03-24 16:01:22', '2024-03-24 16:01:22', NULL, 'SCL');
 
 -- --------------------------------------------------------
 
@@ -197,7 +199,7 @@ ALTER TABLE `bookings`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=712;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=713;
 
 --
 -- AUTO_INCREMENT for table `users`

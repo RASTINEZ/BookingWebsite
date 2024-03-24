@@ -168,18 +168,32 @@ app.post('/login', (req, res) => {
     });
 });
 
-//Rooms endpoint
-app.get('/rooms', (re,res) => {
-    const sql = "SELECT * FROM rooms WHERE available_status = 'ready'";
-    db.query(sql,(err, data) =>{
-        if(err) return res.json(err);
-        return res.json(data);
+// //Rooms endpoint
+// app.get('/rooms', (re,res) => {
+//     const sql = "SELECT * FROM rooms WHERE available_status = 'ready'";
+//     db.query(sql,(err, data) =>{
+//         if(err) return res.json(err);
+//         return res.json(data);
 
-    });
+//     });
     
 
-});
-
+// });
+// Rooms endpoint with building filter
+app.get('/rooms', (req, res) => {
+    const { building } = req.query;
+    let sql = "SELECT * FROM rooms";
+  
+    if (building && building !== 'All') {
+      sql += ` WHERE building = '${building}'`;
+    }
+  
+    db.query(sql, (err, data) => {
+      if (err) return res.json(err);
+      return res.json(data);
+    });
+  });
+  
 
 
 // Endpoint to get schedule for a specific room and date
@@ -348,10 +362,26 @@ app.post('/bookings2', (req, res) => {
 
   
 
+// app.get('/bookingHistory', (req, res) => {
+//     const { username } = req.query;
+//     // Query the database to retrieve booking history for the specified username
+//     const sql = "SELECT * FROM bookings WHERE booked_by = ?";
+//     db.query(sql, [username], (err, results) => {
+//         if (err) {
+//             console.error('Error fetching booking history:', err);
+//             return res.status(500).json({ error: 'An error occurred while fetching booking history' });
+//         }
+//         return res.json(results);
+//     });
+// });
 app.get('/bookingHistory', (req, res) => {
     const { username } = req.query;
     // Query the database to retrieve booking history for the specified username
-    const sql = "SELECT * FROM bookings WHERE booked_by = ?";
+    const sql = `
+        SELECT b.*, r.building
+        FROM bookings b
+        INNER JOIN rooms r ON b.room_id = r.room_number
+        WHERE b.booked_by = ?`;
     db.query(sql, [username], (err, results) => {
         if (err) {
             console.error('Error fetching booking history:', err);
@@ -360,6 +390,8 @@ app.get('/bookingHistory', (req, res) => {
         return res.json(results);
     });
 });
+
+
 
 
 

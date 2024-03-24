@@ -151,7 +151,7 @@ const HistoryPage = () => {
             <li key={index}>
               <strong>{index+1} . </strong><br />
               <strong>Booking ID:</strong> {booking.booking_id}<br />
-              <strong>Room:</strong> {booking.room_id}<br />
+              <strong>Room:</strong> {booking.room_id} ({booking.building})<br />
               <strong>Date & Time:</strong> {booking.start_time} - {booking.end_time}<br />
               <strong>Check in: </strong> {booking.check_in} <br />
               
