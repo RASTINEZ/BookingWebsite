@@ -59,8 +59,10 @@ return (
   <div>
       <NavBar username={username} />
       <div className="container">
+      <br/>
           <h2>Login</h2>
           <Form onSubmit={handleSubmit}>
+          <br/>
               <Form.Group className="mb-3" controlId="username">
                   <Form.Label>Username</Form.Label>
                   <Form.Control type="text" name="username" value={formData.username} onChange={handleChange} />
@@ -72,6 +74,7 @@ return (
               <Button variant="primary" type="submit">
                   Login
               </Button>
+              <br/><br/>
               {errorMessage && <Alert variant="danger" className="mt-3">{errorMessage}</Alert>} {/* Display error message if present */}
           </Form>
           <p className="mt-3">

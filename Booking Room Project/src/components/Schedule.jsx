@@ -6,6 +6,7 @@ import moment from 'moment-timezone';
 import NavBar from './NavBar';
 import { useNavigate, useParams } from 'react-router-dom';
 
+
 const Schedule = ({}) => {
   const [date, setDate] = useState(new Date());
   const [timeSlots, setTimeSlots] = useState([]);
@@ -14,6 +15,7 @@ const Schedule = ({}) => {
   const { roomId } = useParams();
   const navigate = useNavigate();
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [imagePath, setImagePath] = useState(null);
 
   useEffect(() => {
 
@@ -24,6 +26,8 @@ const Schedule = ({}) => {
     setUsername(storedUsername);
     moment.tz.setDefault('Asia/Bangkok');
     fetchTimeSlots(roomId, date);
+    fetchRoomImage(roomId)
+    
   
 
 
@@ -99,6 +103,30 @@ const Schedule = ({}) => {
         });
 };
 
+const fetchRoomImage = (roomId) => {
+
+  fetch(`http://localhost:8081/room-image/${roomId}`)
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Failed to fetch room image');
+          }
+          return response.json();
+      })
+      .then(data => {
+        setImagePath(data.imagePath);
+
+
+        // Return the image path
+
+      })
+      .catch(error => {
+          console.error('Error fetching room image:', error);
+          // Handle error
+          return null; // Return null or handle the error as needed
+      });
+};
+
+
 const addBookings = () => {
   fetch('http://localhost:8081/bookings2', {
     method: 'POST',
@@ -137,12 +165,22 @@ const addBookings = () => {
     <div>
       <NavBar username={username} />
       <div className="d-flex justify-content-center align-items-center flex-column">
-        <h2>Schedule of the Room {roomId}</h2>
-        <div className="text-center">
-          <Calendar onChange={onChange} value={date} />
-        </div>
+        <h2 style={{ color: 'white' }}>Schedule of the Room {roomId}</h2>
+        <div className="d-flex justify-content-center align-items-center">
+    <div className="text-center mr-4"style={{ marginRight: '50px' }}>
+      <Calendar onChange={onChange} value={date} /> 
+    </div>
+    <div  >
+      {imagePath ? (
+        <img src={imagePath} alt={`Room ${roomId}`} style={{ width: 'auto%', height: 'auto', maxWidth: '400px', maxHeight: '400px' }} />
+      ) : (
+        <p>Loading...</p>
+      )}
+      </div>
+    </div>
+        
         <div>
-          <h4>Selected Time Slots:</h4>
+          <h4 style={{ color: 'white' }} >Selected Time Slots:</h4>
           <ul>
             {selectedSlots.map((slot, index) => (
               <li key={index}>
@@ -157,7 +195,7 @@ const addBookings = () => {
               
           </ul>
         </div>
-        <h3>Available Time Slots for {moment(date).format('YYYY-MM-DD')} (Asia/Bangkok Time)</h3>
+        <h3 style={{ color: 'white' }} >Available Time Slots for {moment(date).format('YYYY-MM-DD')} (Asia/Bangkok Time)</h3>
         <table >
           <thead>
             <tr>
@@ -168,7 +206,7 @@ const addBookings = () => {
           </thead>
           <tbody>
             {timeSlots.map((slot, index) => (
-              <tr key={index}>
+              <tr key={index} className="user-column">
                 <td>{slot.startTime} - {slot.endTime}</td>
                 <td>
                   <Badge bg={slot.available ? 'success' : 'danger'}>

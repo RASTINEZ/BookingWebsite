@@ -140,23 +140,23 @@ return (
       </div>
       <div className="admin-container">
         <h2>Booking List&nbsp;&nbsp;</h2>
-        <table>
+        <table className="user-table">
           <thead>
             <tr>
-              <th>No.</th>
-              <th>Booking ID</th>
-              <th>User</th>
-              <th>Room</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Status</th>
-              <th>Check In</th>
-              <th>Action</th>
+              <th className="top-column">No.</th>
+              <th className="top-column">Booking ID</th>
+              <th className="top-column">User</th>
+              <th className="top-column">Room</th>
+              <th className="top-column">Start Time</th>
+              <th className="top-column">End Time</th>
+              <th className="top-column">Status</th>
+              <th className="top-column">Check In</th>
+              <th className="top-column">Action</th>
             </tr>
           </thead>
           <tbody>
             {filteredHistory.map((booking, index) => (
-              <tr key={booking.booking_id}>
+              <tr key={booking.booking_id} className="user-column">
                 <td>{index + 1}</td>
                 <td>{booking.booking_id}</td>
                 <td>{booking.booked_by}</td>

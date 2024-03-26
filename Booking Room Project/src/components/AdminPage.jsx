@@ -57,20 +57,33 @@ const AdminPage = () => {
 
   return (
     <div>
-      <NavBar username={username} />
-      <div className="admin-container">
-        <h2>Admin Panel</h2>
-        <div className="select-option">
-          <label htmlFor="option">Select Option: &nbsp; </label>
-          <select id="option" value={selectedOption} onChange={(e) => handleOptionChange(e.target.value)}>
-            <option value="User List">User List</option>
-            <option value="Booking List">Booking List</option>
-          </select>
-        </div>
-        {selectedOption === 'User List' && <UserList users={users} />}
-        {selectedOption === 'Booking List' && <BookingList bookings={bookings} handleStatusChange={handleStatusChange} />}
+  <NavBar username={username} />
+  <div className="admin-container" style={{ textAlign: 'center' }}>
+    
+    <div className="select-option">
+    <h2 style={{ textAlign: 'center', color: 'white' }}>Admin Panel</h2>
+      <label htmlFor="option" style={{ color: 'white' }}>Select Option: &nbsp; </label>
+      <select id="option" value={selectedOption} onChange={(e) => handleOptionChange(e.target.value)}>
+        <option value="User List">User List</option>
+        <option value="Booking List">Booking List</option>
+      </select>
+
+      {selectedOption === 'User List' && (
+      <div style={{ textAlign: 'center', color: 'white' }}>
+        <br/>
+        <UserList users={users} />
       </div>
+    )}
+    {selectedOption === 'Booking List' && (
+      <div style={{ textAlign: 'center', color: 'white' }}>
+        
+        <BookingList bookings={bookings} handleStatusChange={handleStatusChange} />
+      </div>
+    )}
     </div>
+    
+  </div>
+</div>
   );
 };
 

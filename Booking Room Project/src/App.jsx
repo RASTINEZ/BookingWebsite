@@ -90,7 +90,7 @@ export const App = () => {
       <NavBar username={username} />
       {/* Building filter dropdown */}
       <div style={{ margin: '30px auto', width: '80%', display: 'flex', textAlign: 'right', justifyContent: 'flex-end', marginRight: '200px' }}>
-        <label htmlFor="filterBuilding">Filter by Building:</label>
+        <label htmlFor="filterBuilding"style={{ color: 'white' }}>Filter by Building:</label>
         <select
           id="filterBuilding"
           value={buildingFilter}
@@ -104,18 +104,20 @@ export const App = () => {
 
       {/* filter seach bar                                                                   //move to the right */}                                                              
       <div style={{ margin: '30px auto', width: '80%', display: 'flex', textAlign: 'right', justifyContent: 'flex-end', marginRight: '200px'}}>
-          <label htmlFor="filterRoom">Filter by Room:&nbsp;&nbsp; </label>
+          <label htmlFor="filterRoom" style={{ color: 'white' }} >Filter by Room:&nbsp;&nbsp; </label>
           <input type="text" id="filterRoom" value={roomFilter} onChange={(e) => setRoomFilter(e.target.value)} />
         </div>
       
       <div className="container">
+      
         
         
         {filteredHistory.map((room, index) => (
+          
           <Card
             key={index}
             title={`Room ${room.room_number}`}
-            content={`Building: ${room.building} <br> Size: ${room.room_type}  <br> Status:🟢${room.available_status} `}
+            content={`Building: ${room.building} <br> Type: ${room.room_type}  <br> Status:🟢${room.available_status} `}
             roomId={room.room_number} // Pass room_number as a prop to Card
             username={username}
             url={"https://previews.123rf.com/images/rilueda/rilueda1410/rilueda141000244/32842748-modern-lecture-room.jpg"}
@@ -123,6 +125,8 @@ export const App = () => {
           />
         ))}
       </div>
+
+      <div style={{ marginBottom: '20px' }}></div>
 
 
       {maintainRooms.length > 0 && (

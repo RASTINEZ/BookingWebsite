@@ -103,7 +103,7 @@ app.get('/bookings', (req, res) => {
 
 // Registration endpoint
 app.post('/register', (req, res) => {
-    const { username, email, password, firstName, lastName } = req.body;
+    const { username, email, password, firstName, lastName, phone, studentId } = req.body;
     
     // Check if username already exists
     const checkUsernameQuery = "SELECT * FROM users WHERE username = ?";
@@ -130,8 +130,8 @@ app.post('/register', (req, res) => {
             }
 
             // Insert new user if username and email don't exist
-            const insertUserQuery = "INSERT INTO users (username, email, password, first_name, last_name) VALUES (?, ?, ?, ?, ?)";
-            db.query(insertUserQuery, [username, email, password, firstName, lastName], (insertErr, result) => {
+            const insertUserQuery = "INSERT INTO users (username, email, password, first_name, last_name, phone_number, student_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            db.query(insertUserQuery, [username, email, password, firstName, lastName, phone, studentId], (insertErr, result) => {
                 if (insertErr) {
                     console.error('Error inserting user:', insertErr);
                     return res.status(500).json({ error: 'An error occurred during registration' });
@@ -182,11 +182,11 @@ app.post('/login', (req, res) => {
 // Rooms endpoint with building filter
 app.get('/rooms', (req, res) => {
     const { building } = req.query;
-    let sql = "SELECT * FROM rooms";
+    let sql = "SELECT * FROM rooms WHERE available_status = 'ready'";
   
     if (building && building !== 'All') {
-      sql += ` WHERE building = '${building}'`;
-    }
+        sql += ` AND building = '${building}'`;
+      }
   
     db.query(sql, (err, data) => {
       if (err) return res.json(err);
@@ -194,6 +194,27 @@ app.get('/rooms', (req, res) => {
     });
   });
   
+// Endpoint to get image path for a specific room
+app.get('/room-image/:roomId', (req, res) => {
+    const { roomId } = req.params;
+
+    // Query the rooms table for the image path of the specified room
+    const sql = "SELECT room_schedule_image_path FROM rooms WHERE id = ?";
+    db.query(sql, [roomId], (err, results) => {
+        if (err) {
+            console.error('Error fetching room image:', err);
+            return res.status(500).json({ error: 'An error occurred while fetching room image' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Room not found' });
+        }
+
+        const imagePath = results[0].room_schedule_image_path; // Corrected
+
+        res.json({ imagePath });
+    });
+});
 
 
 // Endpoint to get schedule for a specific room and date
@@ -349,6 +370,7 @@ app.post('/bookings2', (req, res) => {
         res.status(200).json({ message: 'Bookings added successfully' });
     });
 });
+
 
 
 

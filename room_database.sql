@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2024 at 05:55 PM
+-- Generation Time: Mar 26, 2024 at 03:31 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -88,7 +88,7 @@ INSERT INTO `bookings` (`booking_id`, `room_id`, `start_time`, `end_time`, `book
 (61, 709, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 01:15:52', '2024-03-24 01:15:52', 'confirmed', 'no', NULL),
 (62, 706, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 01:17:42', '2024-03-24 01:44:08', 'confirmed', 'yes', NULL),
 (63, 711, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 01:29:48', '2024-03-24 01:43:57', 'rejected', 'yes', NULL),
-(64, 711, '2024-03-24 07:30:00', '2024-03-24 08:00:00', 'admin', '2024-03-24 02:29:09', '2024-03-24 02:29:09', 'confirmed', 'no', NULL),
+(64, 711, '2024-03-24 07:30:00', '2024-03-24 08:00:00', 'admin', '2024-03-24 02:29:09', '2024-03-26 12:51:05', 'confirmed', 'yes', NULL),
 (65, 702, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 03:58:03', '2024-03-24 03:58:03', 'confirmed', 'no', NULL),
 (66, 701, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 03:59:12', '2024-03-24 16:43:11', 'confirmed', 'yes', NULL),
 (67, 711, '2024-03-24 08:00:00', '2024-03-24 08:30:00', 'admin', '2024-03-24 04:04:12', '2024-03-24 04:04:12', 'confirmed', 'no', NULL),
@@ -104,30 +104,30 @@ CREATE TABLE `rooms` (
   `id` int(11) NOT NULL,
   `room_number` varchar(50) NOT NULL,
   `available_status` enum('Ready','booked','Maintain') NOT NULL DEFAULT 'Ready',
-  `room_type` enum('Normal','Big') NOT NULL DEFAULT 'Normal',
+  `room_type` enum('Normal(40 seats)','Big(100 seats)','Auditorium') NOT NULL DEFAULT 'Normal(40 seats)',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `details` varchar(255) DEFAULT NULL,
-  `building` enum('SC45','SCL') DEFAULT 'SC45'
+  `building` enum('SC45','SCL') DEFAULT 'SC45',
+  `room_schedule_image_path` varchar(2000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `room_number`, `available_status`, `room_type`, `created_at`, `updated_at`, `details`, `building`) VALUES
-(701, '701', 'Ready', 'Normal', '2024-03-05 19:16:35', '2024-03-21 06:58:45', NULL, 'SC45'),
-(702, '702', 'Ready', 'Normal', '2024-03-05 19:16:35', '2024-03-21 06:58:50', NULL, 'SC45'),
-(703, '703', 'Maintain', 'Big', '2024-03-04 19:00:28', '2024-03-04 19:29:09', 'microphone broken, แอร์ไม่เย็น', 'SC45'),
-(704, '704', 'Ready', 'Normal', '2024-02-27 12:48:30', '2024-03-21 06:58:54', NULL, 'SC45'),
-(705, '705', 'Ready', 'Normal', '2024-03-05 19:19:45', '2024-03-21 06:58:57', NULL, 'SC45'),
-(706, '706', 'Ready', 'Normal', '2024-03-05 19:20:07', '2024-03-21 06:59:02', NULL, 'SC45'),
-(707, '707', 'Ready', 'Normal', '2024-03-05 19:20:07', '2024-03-21 06:59:05', NULL, 'SC45'),
-(708, '708', 'Ready', 'Normal', '2024-03-05 19:20:27', '2024-03-21 06:59:08', NULL, 'SC45'),
-(709, '709', 'Ready', 'Big', '2024-02-27 12:47:41', '2024-03-21 06:59:12', NULL, 'SC45'),
-(710, '710', 'Maintain', 'Big', '2024-02-27 12:48:17', '2024-03-04 18:41:34', 'bad lights', 'SC45'),
-(711, '711', 'Ready', 'Normal', '2024-03-05 19:20:27', '2024-03-21 06:59:16', NULL, 'SC45'),
-(712, '303', 'Ready', 'Normal', '2024-03-24 16:01:22', '2024-03-24 16:01:22', NULL, 'SCL');
+INSERT INTO `rooms` (`id`, `room_number`, `available_status`, `room_type`, `created_at`, `updated_at`, `details`, `building`, `room_schedule_image_path`) VALUES
+(303, '303', 'Ready', 'Normal(40 seats)', '2024-03-24 16:01:22', '2024-03-25 10:33:58', NULL, 'SCL', NULL),
+(306, '306', 'Ready', 'Normal(40 seats)', '2024-03-26 14:27:32', '2024-03-26 14:27:32', NULL, 'SCL', NULL),
+(703, '703', 'Maintain', 'Normal(40 seats)', '2024-03-04 19:00:28', '2024-03-25 07:22:37', 'microphone broken, แอร์ไม่เย็น', 'SC45', NULL),
+(704, '704', 'Ready', 'Normal(40 seats)', '2024-02-27 12:48:30', '2024-03-25 07:22:37', NULL, 'SC45', NULL),
+(709, '709', 'Ready', 'Big(100 seats)', '2024-02-27 12:47:41', '2024-03-26 14:29:40', NULL, 'SC45', NULL),
+(710, '710', 'Maintain', 'Normal(40 seats)', '2024-02-27 12:48:17', '2024-03-25 07:22:37', 'bad lights', 'SC45', NULL),
+(711, '711', 'Ready', 'Auditorium', '2024-03-05 19:20:27', '2024-03-26 14:26:28', NULL, 'SC45', NULL),
+(713, '713', 'Ready', 'Auditorium', '2024-03-26 11:15:10', '2024-03-26 14:26:36', NULL, 'SC45', '\\src\\assets\\images\\713.jpg'),
+(751, '751', 'Ready', 'Auditorium', '2024-03-26 14:26:54', '2024-03-26 14:26:54', NULL, 'SC45', NULL),
+(803, '803', 'Ready', 'Normal(40 seats)', '2024-03-26 14:25:17', '2024-03-26 14:25:17', NULL, 'SC45', NULL),
+(809, '809', 'Ready', 'Normal(40 seats)', '2024-03-26 14:25:17', '2024-03-26 14:25:17', NULL, 'SC45', NULL);
 
 -- --------------------------------------------------------
 
@@ -142,25 +142,28 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `role` enum('user','teacher','mod','admin') DEFAULT 'user',
   `first_name` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL
+  `last_name` varchar(255) DEFAULT NULL,
+  `phone_number` varchar(20) DEFAULT NULL,
+  `student_id` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `first_name`, `last_name`) VALUES
-(1, 'test', 'test@gmail.com', '11111111', 'teacher', NULL, NULL),
-(2, 'test2', 'test@gmail.com', '22222222', 'user', NULL, NULL),
-(3, 'test3', 'test3@gmail.com', '33333333', 'admin', NULL, NULL),
-(4, 'test4', 'test4@gmail.com', '44444444', 'mod', NULL, NULL),
-(5, 'test5', 'test5@gmail.com', '55555555', 'teacher', NULL, NULL),
-(6, 'test6', 's6@gmail.com', '55555555', 'user', NULL, NULL),
-(7, 'test7', 's7@gmail.com', '77777777', 'user', NULL, NULL),
-(8, 'rastin', 'rastinez1337@gmail.com', '12345678', 'admin', NULL, NULL),
-(9, 'admin', 'tinrunner4869@gmail.com', 'admin12345', 'admin', 'admin', 'naja'),
-(11, 'tin', 'tin@gmail', '12345678', 'user', NULL, NULL),
-(12, 'kkk', '', '', 'user', 'kknuadmaew', '');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `first_name`, `last_name`, `phone_number`, `student_id`) VALUES
+(1, 'test', 'test@gmail.com', '11111111', 'teacher', NULL, NULL, NULL, NULL),
+(2, 'test2', 'test@gmail.com', '22222222', 'user', NULL, NULL, NULL, NULL),
+(3, 'test3', 'test3@gmail.com', '33333333', 'admin', NULL, NULL, NULL, NULL),
+(4, 'test4', 'test4@gmail.com', '44444444', 'mod', NULL, NULL, NULL, NULL),
+(5, 'test5', 'test5@gmail.com', '55555555', 'teacher', NULL, NULL, NULL, NULL),
+(6, 'test6', 's6@gmail.com', '55555555', 'user', NULL, NULL, NULL, NULL),
+(7, 'test7', 's7@gmail.com', '77777777', 'user', NULL, NULL, NULL, NULL),
+(8, 'rastin', 'rastinez1337@gmail.com', '12345678', 'admin', NULL, NULL, NULL, NULL),
+(9, 'admin', 'tinrunner4869@gmail.com', 'admin12345', 'admin', 'admin', 'naja', NULL, NULL),
+(11, 'tin', 'tin@gmail', '12345678', 'user', NULL, NULL, NULL, NULL),
+(12, 'kkk', '', '', 'user', 'kknuadmaew', '', NULL, NULL),
+(13, 'jirateep', 'jirateep.cha@ku.th', '12345678', 'user', 'Jirateep', 'Chanma', '0909175416', '6310451006');
 
 --
 -- Indexes for dumped tables
@@ -193,19 +196,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=713;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=810;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables

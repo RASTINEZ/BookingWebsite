@@ -5,16 +5,21 @@
   flex-wrap: wrap; /* Allow cards to wrap onto the next line */
   justify-content: center;
   gap: 20px; /* Adjust the gap between cards as needed */
-  margin-top: 20px; /* Add some top margin to separate the cards from the navbar */
-  background-color: #cfe2f1; /* Replace with the color code you want */
+  padding-top: 20px;
+  background-color: #535C91; /* Replace with the color code you want */
 }
 
 .page-container {
-  background-color: #cfe2f1; /* Replace with the color code you want */
+  background-color: #535C91; /* Replace with the color code you want */
   
 }
 
+/* Optional: Add padding to the body to prevent content from being obscured by the fixed navbar */
+body {
+  padding-top: 64px; /* Adjust according to the height of your navbar */
+  background-color: #1B1A55;
 
+}
 
 
 .card {
@@ -74,10 +79,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for depth */
 }
 
-/* Optional: Add padding to the body to prevent content from being obscured by the fixed navbar */
-body {
-  padding-top: 64px; /* Adjust according to the height of your navbar */
-}
+
 .admin-container {
   display: flex;
   justify-content: center;
@@ -91,7 +93,7 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #ddd; /* Border for the entire table */
+  border: 1px solid #ffffff; /* Border for the entire table */
   margin-right: 20px; /* Add right margin to create space */
   margin-left: 20px; /* Add right margin to create space */
 }
@@ -102,11 +104,11 @@ th, td {
 }
 
 th {
-  background-color: #deeed4; /* Background color for table headers */
+  background-color: #ffffff; /* Background color for table headers */
 }
 
 tr:nth-child(even) {
-  background-color: #f4f7ed; /* Alternate row background color */
+  background-color: #9290C3; /* Alternate row background color */
 }
 
 
@@ -252,8 +254,31 @@ tr:nth-child(even) {
   color: #ff5733; /* Example custom logout button color */
 }
 .custom-navbar {
-  background-color: #000c52; /* Replace with the color code you want */
+  background-color: #070F2B; /* Replace with the color code you want */
 }
+
+.user-table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #070F2B;
+}
+
+.user-column {
+  border: 1px solid #ffffff;
+  text-align: left;
+  padding: 8px;
+  background-color: #535C91;
+}
+.top-column {
+  border: 1px solid #ffffff;
+  text-align: left;
+  padding: 8px;
+  background-color: #070F2B;
+}
+
+
+
+
 
 
 

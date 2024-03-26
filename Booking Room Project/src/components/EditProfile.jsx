@@ -68,22 +68,22 @@ const fetchUserData = (username) => {
         <NavBar username={username} />
         <div className="container2">
     
-    <h2>Edit Profile</h2>
+    <h2 style={{ color: 'white' }}>Edit Profile</h2>
     <form onSubmit={handleSubmit} className="profile-form">
       <div className="form-group">
-        <label>First Name:</label>
+        <label style={{ color: 'white' }}>First Name:</label>
         <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
       </div>
       <div className="form-group">
-        <label>Last Name:</label>
+        <label style={{ color: 'white' }}>Last Name:</label>
         <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
       </div>
       <div className="form-group">
-        <label>Email:</label>
+        <label style={{ color: 'white' }}>Email:</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
       </div>
       <div className="form-group">
-        <label>Password:</label>
+        <label style={{ color: 'white' }}>Password:</label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
       <button type="submit" className="submit-button">Save Changes</button>

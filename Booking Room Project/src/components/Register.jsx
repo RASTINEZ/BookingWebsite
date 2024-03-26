@@ -12,6 +12,8 @@ const Register = ({}) => {
     confirmPassword: '',
     firstName: '',
     lastName: '',
+    phone: '',
+    studentId: '',
   });
   const [error, setError] = useState('');
   const navigate  = useNavigate();
@@ -75,9 +77,11 @@ useEffect(() => {
     <div>
       <NavBar username={username} />
       <div className="container">
+        <br/>
         <h2>Register</h2>
 
         <Form onSubmit={handleSubmit}>
+        <br/>
           <Form.Group className="mb-3" controlId="username">
             <Form.Label>Username</Form.Label>
             <Form.Control type="text" name="username" value={formData.username} onChange={handleChange} />
@@ -107,9 +111,20 @@ useEffect(() => {
             <Form.Label>Last Name</Form.Label>
             <Form.Control type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
           </Form.Group>
+          <Form.Group className="mb-3" controlId="phone">
+            <Form.Label>Phone Number</Form.Label>
+            <Form.Control type="text" name="phone" value={formData.phone} onChange={handleChange} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="studentId">
+            <Form.Label>Student ID</Form.Label>
+            <Form.Control type="text" name="studentId" value={formData.studentId} onChange={handleChange} />
+          </Form.Group>
+
+
           <Button variant="primary" type="submit">
             Register
           </Button>
+          <br/><br/>
         </Form>
         <p className="mt-3">
           Already have an account? <Link to="/login">Login</Link>

@@ -22,6 +22,9 @@ import EditProfile from './components/EditProfile.jsx'
 
 
 
+
+
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -52,6 +55,8 @@ const router = createBrowserRouter([
     path: "EditProfile/:username",
     element: <EditProfile/>,
   },
+  
+  
 
   
 

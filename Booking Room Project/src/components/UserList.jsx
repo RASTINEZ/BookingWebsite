@@ -84,28 +84,32 @@ return (
       
       <div className="admin-container">
         <h2>User List&nbsp;&nbsp;</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>User ID</th>
-              <th>Username</th>
-              <th>First name</th>
-              <th>Last name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map(user => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.username}</td>
-                <td>{user.first_name}</td>
-                <td>{user.last_name}</td>
-                <td>{user.email}</td>
-                <td>{user.role}</td>
-                <td>
+        <table className="user-table">
+      <thead>
+        <tr>
+          <th className="top-column">User ID</th>
+          <th className="top-column">Username</th>
+          <th className="top-column">First name</th>
+          <th className="top-column">Last name</th>
+          <th className="top-column">Email</th>
+          <th className="top-column">Phone</th>
+          <th className="top-column">Student ID</th>
+          <th className="top-column">Role</th>
+          <th className="top-column">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map(user => (
+          <tr key={user.id} className="user-column">
+            <td className="user-column">{user.id}</td>
+            <td className="user-column">{user.username}</td>
+            <td className="user-column">{user.first_name}</td>
+            <td className="user-column">{user.last_name}</td>
+            <td className="user-column">{user.email}</td>
+            <td className="user-column">{user.phone_number}</td>
+            <td className="user-column">{user.student_id}</td>
+            <td className="user-column">{user.role}</td>
+            <td className="user-column">
                 <select onChange={(e) => updateUserRole(user, e.target.value)}>
                     <option value="user">User</option>
                     <option value="teacher">Teacher</option>

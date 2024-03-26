@@ -9,6 +9,8 @@ const HistoryPage = () => {
   const [filterOption, setFilterOption] = useState('All'); // Default filter option
   const [roomFilter, setRoomFilter] = useState(''); // Default room filter value
   const [filteredHistory, setFilteredHistory] = useState([]);
+  // const sortedHistory = [...filteredHistory].sort((a, b) => new Date(b.start_time) - new Date(a.start_time)); date sorting
+  const sortedHistory = [...filteredHistory].sort((a, b) => b.booking_id - a.booking_id);
   
 
   useEffect(() => {
@@ -51,6 +53,11 @@ const HistoryPage = () => {
 
    // Function to cancel a booking
    const cancelBooking = (bookingId) => {
+    const isConfirmed = window.confirm("Are you sure you want to cancel this booking?");
+    if (!isConfirmed) {
+        // If the user cancels, do nothing
+        return;
+    }
     // Make a DELETE request to cancel the booking
     fetch(`http://localhost:8081/cancelBooking/${bookingId}`, {
       method: 'DELETE',
@@ -139,16 +146,16 @@ const HistoryPage = () => {
       display: 'flex',
       
     }} >
-        <h2>Booking History</h2><br />
+        <h2 style={{ color: 'white' }}>Booking History</h2><br />
         
         <ul>
         <div style={{ margin: '30px auto', width: '80%', display: 'flex',}}>
-          <label htmlFor="filterRoom">Filter by Room:&nbsp;&nbsp; </label>
+          <label htmlFor="filterRoom" style={{ color: 'white' }}>Filter by Room:&nbsp;&nbsp; </label>
           <input type="text" id="filterRoom" value={roomFilter} onChange={(e) => setRoomFilter(e.target.value)} />
         </div>
-          {filteredHistory.map((booking, index) => (
+          {sortedHistory.map((booking, index) => (
             
-            <li key={index}>
+            <li key={index} style={{ border: '1px solid black', borderRadius: '5px', padding: '10px', marginBottom: '10px' }}>
               <strong>{index+1} . </strong><br />
               <strong>Booking ID:</strong> {booking.booking_id}<br />
               <strong>Room:</strong> {booking.room_id} ({booking.building})<br />
