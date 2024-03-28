@@ -121,10 +121,10 @@ export const App = () => {
             roomId={room.room_number} // Pass room_number as a prop to Card
             username={username}
             url={
-              room.room_type === 'Auditorium'
-                ? "https://chicagoplays.com/wp-content/uploads/2018/12/ChicagoPlays-Template-2023-08-15T124140.566.jpg" // Replace with actual auditorium image URL
+              room.room_type === 'Meeting Room'
+                ? "https://cdn.shopify.com/s/files/1/0605/0136/0804/files/Modern_meeting_room_with_advanced_technology.jpg?v=1703751846" // Replace with actual auditorium image URL
                 : room.room_type === 'Big(100 seats)'
-                ? "https://www.ecophon.com/globalassets/new-site/media/images/acoustic-solutions/education/university-of-lodz-2.3600x3600.jpg?width=1440&mode=crop&heightratio=0.5&quality=90" // Replace with actual big room image URL
+                ? "https://media.licdn.com/dms/image/C4E12AQF5Rrnjk24OzQ/article-cover_image-shrink_720_1280/0/1579964780563?e=2147483647&v=beta&t=iEt5jbkYuJvxyC0yp8NJmDqTqgI8wXZB4eG4ZZ5xYxc" // Replace with actual big room image URL
                 : "https://previews.123rf.com/images/rilueda/rilueda1410/rilueda141000244/32842748-modern-lecture-room.jpg" // Default image URL
             }
              

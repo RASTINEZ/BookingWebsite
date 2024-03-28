@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 28, 2024 at 02:01 PM
+-- Generation Time: Mar 28, 2024 at 03:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -107,7 +107,7 @@ CREATE TABLE `rooms` (
   `id` int(11) NOT NULL,
   `room_number` varchar(50) NOT NULL,
   `available_status` enum('Ready','booked','Maintain') NOT NULL DEFAULT 'Ready',
-  `room_type` enum('Normal(40 seats)','Big(100 seats)','Auditorium') NOT NULL DEFAULT 'Normal(40 seats)',
+  `room_type` enum('Normal(40 seats)','Big(100 seats)','Meeting Room') NOT NULL DEFAULT 'Normal(40 seats)',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `details` varchar(255) DEFAULT NULL,
@@ -126,9 +126,9 @@ INSERT INTO `rooms` (`id`, `room_number`, `available_status`, `room_type`, `crea
 (704, '704', 'Ready', 'Normal(40 seats)', '2024-02-27 12:48:30', '2024-03-25 07:22:37', NULL, 'SC45', NULL),
 (709, '709', 'Ready', 'Big(100 seats)', '2024-02-27 12:47:41', '2024-03-26 14:29:40', NULL, 'SC45', NULL),
 (710, '710', 'Maintain', 'Normal(40 seats)', '2024-02-27 12:48:17', '2024-03-25 07:22:37', 'bad lights', 'SC45', NULL),
-(711, '711', 'Ready', 'Auditorium', '2024-03-05 19:20:27', '2024-03-26 14:26:28', NULL, 'SC45', NULL),
-(713, '713', 'Ready', 'Auditorium', '2024-03-26 11:15:10', '2024-03-26 14:26:36', NULL, 'SC45', '\\src\\assets\\images\\713.jpg'),
-(751, '751', 'Ready', 'Auditorium', '2024-03-26 14:26:54', '2024-03-26 14:26:54', NULL, 'SC45', NULL),
+(711, '711', 'Ready', 'Meeting Room', '2024-03-05 19:20:27', '2024-03-28 14:04:47', NULL, 'SC45', NULL),
+(713, '713', 'Ready', 'Meeting Room', '2024-03-26 11:15:10', '2024-03-28 14:04:42', NULL, 'SC45', '\\src\\assets\\images\\713.jpg'),
+(751, '751', 'Ready', 'Meeting Room', '2024-03-26 14:26:54', '2024-03-28 14:04:35', NULL, 'SC45', NULL),
 (803, '803', 'Ready', 'Normal(40 seats)', '2024-03-26 14:25:17', '2024-03-26 14:25:17', NULL, 'SC45', NULL),
 (809, '809', 'Ready', 'Normal(40 seats)', '2024-03-26 14:25:17', '2024-03-26 14:25:17', NULL, 'SC45', NULL);
 
