@@ -7,7 +7,7 @@ const transporter = nodemailer.createTransport({
     secure: false, // Use TLS (true for 465 port, false for other ports)
     auth: {
         user: 'kuroomservice@hotmail.com', // Your Outlook email address
-        pass: 'servicebyrastin1337', // Your Outlook password
+        pass: 'poggerswebsite1234', // Your Outlook password
     },
 });
 const formatDateAndTime = (dateTimeString) => {
