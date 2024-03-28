@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2024 at 03:31 PM
+-- Generation Time: Mar 28, 2024 at 02:01 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,7 +35,7 @@ CREATE TABLE `bookings` (
   `booked_by` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `status` enum('pending','confirmed','rejected') NOT NULL DEFAULT 'pending',
+  `status` enum('pending','confirmed','rejected','cancelled') NOT NULL DEFAULT 'pending',
   `check_in` enum('yes','no') DEFAULT 'no',
   `detail` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -85,14 +85,17 @@ INSERT INTO `bookings` (`booking_id`, `room_id`, `start_time`, `end_time`, `book
 (58, 702, '2024-03-21 10:30:00', '2024-03-21 11:00:00', 'admin', '2024-03-21 08:36:22', '2024-03-24 16:43:07', 'confirmed', 'yes', NULL),
 (59, 707, '2024-03-21 07:00:00', '2024-03-21 07:30:00', 'admin', '2024-03-21 08:37:38', '2024-03-21 08:37:38', 'confirmed', 'no', NULL),
 (60, 702, '2024-03-21 07:30:00', '2024-03-21 08:00:00', 'admin', '2024-03-21 08:40:28', '2024-03-21 08:40:28', 'confirmed', 'no', NULL),
-(61, 709, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 01:15:52', '2024-03-24 01:15:52', 'confirmed', 'no', NULL),
+(61, 709, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 01:15:52', '2024-03-28 10:06:10', 'cancelled', 'no', 'เปลี่ยนใจ'),
 (62, 706, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 01:17:42', '2024-03-24 01:44:08', 'confirmed', 'yes', NULL),
-(63, 711, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 01:29:48', '2024-03-24 01:43:57', 'rejected', 'yes', NULL),
-(64, 711, '2024-03-24 07:30:00', '2024-03-24 08:00:00', 'admin', '2024-03-24 02:29:09', '2024-03-26 12:51:05', 'confirmed', 'yes', NULL),
+(63, 711, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 01:29:48', '2024-03-28 10:22:27', 'rejected', 'yes', 'ห้องพังชั่วคราว'),
+(64, 711, '2024-03-24 07:30:00', '2024-03-24 08:00:00', 'admin', '2024-03-24 02:29:09', '2024-03-28 10:33:15', 'confirmed', 'yes', 'เน็ตดับ'),
 (65, 702, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 03:58:03', '2024-03-24 03:58:03', 'confirmed', 'no', NULL),
 (66, 701, '2024-03-24 07:00:00', '2024-03-24 07:30:00', 'admin', '2024-03-24 03:59:12', '2024-03-24 16:43:11', 'confirmed', 'yes', NULL),
-(67, 711, '2024-03-24 08:00:00', '2024-03-24 08:30:00', 'admin', '2024-03-24 04:04:12', '2024-03-24 04:04:12', 'confirmed', 'no', NULL),
-(68, 707, '2024-03-24 07:30:00', '2024-03-24 08:00:00', 'admin', '2024-03-24 04:05:02', '2024-03-24 04:05:02', 'confirmed', 'no', NULL);
+(67, 711, '2024-03-24 08:00:00', '2024-03-24 08:30:00', 'admin', '2024-03-24 04:04:12', '2024-03-28 11:43:37', 'confirmed', 'yes', NULL),
+(68, 707, '2024-03-24 07:30:00', '2024-03-24 08:00:00', 'admin', '2024-03-24 04:05:02', '2024-03-24 04:05:02', 'confirmed', 'no', NULL),
+(73, 713, '2024-03-31 07:00:00', '2024-03-31 07:30:00', 'admin', '2024-03-28 11:44:05', '2024-03-28 11:44:05', 'confirmed', 'no', NULL),
+(74, 713, '2024-03-31 07:30:00', '2024-03-31 08:00:00', 'admin', '2024-03-28 11:44:05', '2024-03-28 11:44:05', 'confirmed', 'no', NULL),
+(75, 713, '2024-03-31 08:00:00', '2024-03-31 08:30:00', 'admin', '2024-03-28 11:44:05', '2024-03-28 11:44:05', 'confirmed', 'no', NULL);
 
 -- --------------------------------------------------------
 
@@ -153,7 +156,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `first_name`, `last_name`, `phone_number`, `student_id`) VALUES
 (1, 'test', 'test@gmail.com', '11111111', 'teacher', NULL, NULL, NULL, NULL),
-(2, 'test2', 'test@gmail.com', '22222222', 'user', NULL, NULL, NULL, NULL),
+(2, 'test2', 'test@gmail.com', '22222222', 'user', 'เทสงับ', 'จุ๊กกรู้', NULL, NULL),
 (3, 'test3', 'test3@gmail.com', '33333333', 'admin', NULL, NULL, NULL, NULL),
 (4, 'test4', 'test4@gmail.com', '44444444', 'mod', NULL, NULL, NULL, NULL),
 (5, 'test5', 'test5@gmail.com', '55555555', 'teacher', NULL, NULL, NULL, NULL),
@@ -196,7 +199,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `rooms`

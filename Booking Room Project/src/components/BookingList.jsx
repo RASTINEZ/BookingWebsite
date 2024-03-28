@@ -11,6 +11,7 @@ const BookingList = () => {
   const [filterOption, setFilterOption] = useState('All'); // Default filter option
   const [roomFilter, setRoomFilter] = useState(''); // Default room filter value
   const [filteredHistory, setFilteredHistory] = useState([]);
+  const [usernameFilter, setUsernameFilter] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState('');
   const [detail, setDetail] = useState('');
@@ -27,7 +28,7 @@ const BookingList = () => {
 
   useEffect(() => {
     filterHistory();
-  }, [bookings, filterOption, roomFilter]);
+  }, [bookings, filterOption, roomFilter, usernameFilter]);
 
   const filterHistory = () => {
     let filtered = bookings;
@@ -38,7 +39,16 @@ const BookingList = () => {
       const roomFilterLower = roomFilter.toLowerCase();
       filtered = filtered.filter(booking => `${booking.room_id}`.toLowerCase().includes(roomFilterLower));
     }
+    if (usernameFilter !== '') {
+      const usernameFilterLower = usernameFilter.toLowerCase();
+      filtered = filtered.filter(booking => booking.booked_by.toLowerCase().includes(usernameFilterLower));
+    }
     setFilteredHistory(filtered);
+  };
+
+   // Add username filter input
+   const handleUsernameFilterChange = (event) => {
+    setUsernameFilter(event.target.value);
   };
 
   const fetchBookings = async () => {
@@ -133,10 +143,16 @@ return (
           <option value="confirmed">Confirmed</option>
           <option value="pending">Pending</option>
           <option value="rejected">Rejected</option>
+          <option value="cancelled">Cancelled</option>
         </select>
         &nbsp;&nbsp;
         <label htmlFor="filterRoom">Filter by Room:&nbsp;&nbsp; </label>
         <input type="text" id="filterRoom" value={roomFilter} onChange={(e) => setRoomFilter(e.target.value)} />
+        
+        &nbsp;&nbsp;
+        <label htmlFor="filterUsername">Filter by User:&nbsp;&nbsp; </label>
+        <input type="text" id="filterUsername" value={usernameFilter} onChange={handleUsernameFilterChange} />
+      
       </div>
       <div className="admin-container">
         <h2>Booking List&nbsp;&nbsp;</h2>
@@ -161,8 +177,8 @@ return (
                 <td>{booking.booking_id}</td>
                 <td>{booking.booked_by}</td>
                 <td>{booking.room_id}</td>
-                <td>{formatDateAndTime(booking.start_time)}</td>
-                <td>{formatDateAndTime(booking.end_time)}</td>
+                <td className="left-align">{formatDateAndTime(booking.start_time)}</td>
+                <td className="left-align">{formatDateAndTime(booking.end_time)}</td>
                 <td>{booking.status}</td>
                 <td>{booking.check_in}</td>
                 <td>

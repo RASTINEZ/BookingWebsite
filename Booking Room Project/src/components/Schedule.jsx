@@ -16,6 +16,8 @@ const Schedule = ({}) => {
   const navigate = useNavigate();
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [imagePath, setImagePath] = useState(null);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [role, setRole] = useState('');
 
   useEffect(() => {
 
@@ -24,14 +26,37 @@ const Schedule = ({}) => {
 
     
     setUsername(storedUsername);
+    getName(storedUsername)
+        .then(data => {
+
+          setRole(data.role);
+        })
+        .catch(error => {
+          console.error('Failed to retrieve name:', error);
+        });
     moment.tz.setDefault('Asia/Bangkok');
     fetchTimeSlots(roomId, date);
     fetchRoomImage(roomId)
+    setCurrentDate(new Date());
     
   
 
 
   }, [navigate, roomId, date]);
+
+  const getName = async (storedUsername) => {
+    try {
+      const response = await fetch(`http://localhost:8081/getname/${storedUsername}`);
+      if (!response.ok) {
+        throw new Error('Failed to retrieve name');
+      }
+      const data = await response.json();
+      return data; // This will contain first_name and last_name
+    } catch (error) {
+      console.error('Error retrieving name:', error);
+      // Handle error
+    }
+  };
 
   
 
@@ -95,6 +120,10 @@ const Schedule = ({}) => {
                     }
                 });
             });
+            // Update availability of time slots based on current time
+            allSlots.forEach(slot => {
+              slot.available = role === 'admin' || role === 'mod'|| role === 'teacher' ? isSlotAvailableForAdmin(slot) : isSlotAvailable(slot);
+          });
             setTimeSlots(allSlots);
         })
         .catch(error => {
@@ -102,6 +131,125 @@ const Schedule = ({}) => {
             // Handle error
         });
 };
+
+// Function to check if a slot is available for booking based on current time
+const isSlotAvailable = (slot) => {
+  const currentDate = moment(); // Get the current date and time
+  const selectedDate = moment(date).startOf('day'); // Get the selected date
+  
+  // Get tomorrow's date
+  const tomorrowDate = moment().add(1, 'day').startOf('day');
+
+  // Check if the selected date is tomorrow
+  if (selectedDate.isSame(tomorrowDate, 'day')) {
+    // Parse slot start time
+    const slotStartTime = moment(slot.startTime, 'HH:mm');
+
+    // Check if the slot start time is after 12:00 PM
+    if (slotStartTime.isAfter(moment().startOf('day').add(12, 'hours'))) {
+      return true; // Slot is available if it's after 12:00 PM for tomorrow
+    }
+    // Slot is not available if it's before 12:00 PM for tomorrow
+    return false;
+  }
+
+  // Check if the selected date is today and the slot time is in the past
+  if (selectedDate.isSame(currentDate, 'day')) {
+    // Parse slot start time
+    const slotStartTime = moment(slot.startTime, 'HH:mm');
+
+    // Check if the slot start time is before the current time
+    if (slotStartTime.isBefore(currentDate)) {
+      return false; // Slot is not available if it's in the past for today
+    }
+    return true; // Slot is available if it's in the future for today
+  }
+  if (selectedDate.isBefore(currentDate, 'day')) {
+
+    return false;
+
+
+  }
+
+
+
+
+
+  // Allow booking for any date after tomorrow
+  return true;
+};
+// Function to check if a slot is available for booking based on current time
+const isSlotAvailableForAdmin = (slot) => {
+  const currentDate = moment(); // Get the current date and time
+  const selectedDate = moment(date).startOf('day'); // Get the selected date
+  
+  
+
+  // Check if the selected date is today and the slot time is in the past
+  if (selectedDate.isSame(currentDate, 'day')) {
+    // Parse slot start time
+    const slotStartTime = moment(slot.startTime, 'HH:mm');
+
+    // Check if the slot start time is before the current time
+    if (slotStartTime.isBefore(currentDate)) {
+      return true; // Slot is not available if it's in the past for today
+    }
+    return true; // Slot is available if it's in the future for today
+  }
+  if (selectedDate.isBefore(currentDate, 'day')) {
+
+    return false;
+
+
+  }
+
+
+
+
+
+  // Allow booking for any date after tomorrow
+  return true;
+};
+
+// const isSlotAvailable = (slot) => {
+//   const currentDate = moment(); // Get the current date and time
+//   const selectedDate = moment(date).startOf('day'); // Get the selected date
+  
+//   // Get tomorrow's date
+//   const tomorrowDate = moment().add(1, 'day').startOf('day');
+
+//   // Check if the selected date is tomorrow
+//   if (selectedDate.isSame(tomorrowDate, 'day')) {
+//     // Parse slot start time
+//     const slotStartTime = moment(slot.startTime, 'HH:mm');
+
+//     // Check if the slot start time is after 12:00 PM
+//     if (slotStartTime.isAfter(moment().startOf('day').add(12, 'hours'))) {
+//       return true; // Slot is available if it's after 12:00 PM for tomorrow
+//     }
+//     // Slot is not available if it's before 12:00 PM for tomorrow
+//     return false;
+//   }
+
+//   // Check if the selected date is today and the slot time is in the past
+//   if (selectedDate.isSame(currentDate, 'day')) {
+//     // Parse slot start time
+//     const slotStartTime = moment(slot.startTime, 'HH:mm');
+
+//     // Check if the slot start time is before the current time
+//     if (slotStartTime.isBefore(currentDate)) {
+//       return false; // Slot is not available if it's in the past for today
+//     }
+//     return false;
+//   }
+
+//   // Allow booking for any date after tomorrow
+//   return true;
+// };
+
+
+
+
 
 const fetchRoomImage = (roomId) => {
 

@@ -101,15 +101,15 @@ return (
       <tbody>
         {users.map(user => (
           <tr key={user.id} className="user-column">
-            <td className="user-column">{user.id}</td>
-            <td className="user-column">{user.username}</td>
-            <td className="user-column">{user.first_name}</td>
-            <td className="user-column">{user.last_name}</td>
-            <td className="user-column">{user.email}</td>
-            <td className="user-column">{user.phone_number}</td>
-            <td className="user-column">{user.student_id}</td>
-            <td className="user-column">{user.role}</td>
-            <td className="user-column">
+            <td >{user.id}</td>
+            <td >{user.username}</td>
+            <td >{user.first_name}</td>
+            <td >{user.last_name}</td>
+            <td >{user.email}</td>
+            <td >{user.phone_number}</td>
+            <td >{user.student_id}</td>
+            <td >{user.role}</td>
+            <td >
                 <select onChange={(e) => updateUserRole(user, e.target.value)}>
                     <option value="user">User</option>
                     <option value="teacher">Teacher</option>
@@ -117,7 +117,7 @@ return (
                     <option value="admin">Admin</option>
                 </select>&nbsp;&nbsp;
                 
-                  <button className="red-button" onClick={() => handleDeleteUser(user.id)}>Delete</button>
+                  <button className="red-button" onClick={() => handleDeleteUser(user.id)}>Set Inactive</button>
                 </td>
               </tr>
             ))}

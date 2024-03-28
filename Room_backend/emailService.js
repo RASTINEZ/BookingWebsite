@@ -52,7 +52,7 @@ const sendEmail = (email, username, room_Id, start_Time, end_Time, status, booki
   }
   // Example email options
   const mailOptions = {
-    from: '"KU Room Service" <kuroomservice@hotmail.com>',
+    from: '"COM-SCI Room Service @KU" <kuroomservice@hotmail.com>',
     to: email,
     subject: 'Booking Confirmation',
     text: emailText,
@@ -82,7 +82,7 @@ const sendEmail2 = (email, username, room_Id, date, start_Time, end_Time, status
 
   // Example email options
   const mailOptions = {
-    from: '"KU Room Service" <kuroomservice@hotmail.com>',
+    from: '"COM-SCI Room Service @KU" <kuroomservice@hotmail.com>',
     to: email,
     subject: 'Booking Confirmation',
     text: emailText,
@@ -102,5 +102,28 @@ const sendEmail2 = (email, username, room_Id, date, start_Time, end_Time, status
 };
 
 
+// Function to send an email to the admin
+const sendEmailToAdmin = (bookingId, roomId, detail) => {
+
+  let adminEmail = 'tinrunner4869@gmail.com';
+  
+
+  const mailOptions = {
+      from: '"COM-SCI Room Service @KU" <kuroomservice@hotmail.com>',
+      to: adminEmail,
+      subject: `Problem reported for booking ID: ${bookingId}, Room : ${roomId}`,
+      text: `A problem has been reported for booking ID ${bookingId}, Room ${roomId} with the following details:\n\n${detail}`
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+          console.error('Error sending email:', error);
+      } else {
+          console.log('Email sent:', info.response);
+      }
+  });
+};
+
+
 module.exports = { sendEmail,
-   sendEmail2 };
+   sendEmail2, sendEmailToAdmin };

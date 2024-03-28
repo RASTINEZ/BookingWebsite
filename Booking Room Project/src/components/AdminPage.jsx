@@ -61,21 +61,21 @@ const AdminPage = () => {
   <div className="admin-container" style={{ textAlign: 'center' }}>
     
     <div className="select-option">
-    <h2 style={{ textAlign: 'center', color: 'white' }}>Admin Panel</h2>
-      <label htmlFor="option" style={{ color: 'white' }}>Select Option: &nbsp; </label>
+    <h2 style={{ textAlign: 'center', color: 'black' }}>Admin Panel</h2>
+      <label htmlFor="option" style={{ color: 'black' }}>Select Option: &nbsp; </label>
       <select id="option" value={selectedOption} onChange={(e) => handleOptionChange(e.target.value)}>
         <option value="User List">User List</option>
         <option value="Booking List">Booking List</option>
       </select>
 
       {selectedOption === 'User List' && (
-      <div style={{ textAlign: 'center', color: 'white' }}>
+      <div style={{ textAlign: 'center', color: 'black' }}>
         <br/>
         <UserList users={users} />
       </div>
     )}
     {selectedOption === 'Booking List' && (
-      <div style={{ textAlign: 'center', color: 'white' }}>
+      <div style={{ textAlign: 'center', color: 'black' }}>
         
         <BookingList bookings={bookings} handleStatusChange={handleStatusChange} />
       </div>

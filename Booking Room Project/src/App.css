@@ -6,18 +6,18 @@
   justify-content: center;
   gap: 20px; /* Adjust the gap between cards as needed */
   padding-top: 20px;
-  background-color: #535C91; /* Replace with the color code you want */
+  background-color: #abccfa; /* Replace with the color code you want */
 }
 
 .page-container {
-  background-color: #535C91; /* Replace with the color code you want */
+  background-color: #cdd2ff; /* Replace with the color code you want */
   
 }
 
 /* Optional: Add padding to the body to prevent content from being obscured by the fixed navbar */
 body {
   padding-top: 64px; /* Adjust according to the height of your navbar */
-  background-color: #1B1A55;
+  background-color: #95aaf1;
 
 }
 
@@ -100,15 +100,16 @@ table {
 
 th, td {
   padding: 8px;
-  text-align: left;
+  text-align: center;
 }
+
 
 th {
   background-color: #ffffff; /* Background color for table headers */
 }
 
 tr:nth-child(even) {
-  background-color: #9290C3; /* Alternate row background color */
+  background-color: #DAFFFB; /* Alternate row background color */
 }
 
 
@@ -197,7 +198,7 @@ tr:nth-child(even) {
 }
 
 .popup {
-  background-color: rgb(240, 202, 202);
+  background-color: rgb(248, 248, 248);
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -205,6 +206,15 @@ tr:nth-child(even) {
 
 .popup h3 {
   margin-top: 0;
+}
+.popup textarea {
+  width: 100%;
+  min-height: 100px;
+  margin-bottom: 10px;
+}
+
+.popup .submit-buttons button {
+  margin-right: 10px;
 }
 
 .container2 {
@@ -264,16 +274,44 @@ tr:nth-child(even) {
 }
 
 .user-column {
-  border: 1px solid #ffffff;
+  border: 1px solid #000000;
   text-align: left;
   padding: 8px;
-  background-color: #535C91;
+  background-color: #64CCC5;
 }
 .top-column {
-  border: 1px solid #ffffff;
-  text-align: left;
+  border: 1px solid #000000;
+  text-align: center;
   padding: 8px;
-  background-color: #070F2B;
+  background-color: #176B87;
+}
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.booking-table th,
+.booking-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #000000;
+}
+
+.booking-table th {
+  background-color: #31a0c5;
+  font-weight: bold;
+}
+
+.booking-table tr:nth-child(even) {
+  background-color: #99c2ce; /* Even row color */
+}
+
+.booking-table tr:nth-child(odd) {
+  background-color: #acdadd; /* Odd row color */
+}
+
+.booking-table tr:hover {
+  background-color: #e0e0e0;
 }
 
 

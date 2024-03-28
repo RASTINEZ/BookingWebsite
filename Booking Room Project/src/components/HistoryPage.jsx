@@ -11,6 +11,11 @@ const HistoryPage = () => {
   const [filteredHistory, setFilteredHistory] = useState([]);
   // const sortedHistory = [...filteredHistory].sort((a, b) => new Date(b.start_time) - new Date(a.start_time)); date sorting
   const sortedHistory = [...filteredHistory].sort((a, b) => b.booking_id - a.booking_id);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedBookingId, setSelectedBookingId] = useState('');
+  const [detail, setDetail] = useState('');
   
 
   useEffect(() => {
@@ -52,32 +57,17 @@ const HistoryPage = () => {
   };
 
    // Function to cancel a booking
-   const cancelBooking = (bookingId) => {
-    const isConfirmed = window.confirm("Are you sure you want to cancel this booking?");
-    if (!isConfirmed) {
-        // If the user cancels, do nothing
-        return;
-    }
-    // Make a DELETE request to cancel the booking
-    fetch(`http://localhost:8081/cancelBooking/${bookingId}`, {
-      method: 'DELETE',
+   const cancelBooking = (bookingId, detail) => {
+    axios.put(`http://localhost:8081/cancelBooking/${bookingId}`, { detail })
+    .then(response => {
+      alert('Booking cancelled successfully');
+      // Optional: Update local state or perform any necessary actions
+      fetchBookingHistory(username); // Fetch updated booking history
     })
-      .then((response) => {
-        if (response.ok) {
-          // If the cancellation is successful, fetch the updated booking history
-          fetchBookingHistory();
-          alert('Cancel booking successful');
-          window.location.reload();
-        } else {
-          console.error('Failed to cancel booking');
-          // Handle cancellation failure
-        }
-      })
-      .catch((error) => {
-        console.error('Error cancelling booking:', error);
-        // Handle cancellation error
-      });
-
+    .catch(error => {
+      console.error('Error reporting problem:', error);
+      alert('Error reporting problem. Please try again later.');
+    });
   };
 
   const filterHistory = () => {
@@ -128,6 +118,42 @@ const HistoryPage = () => {
         });
 };
 
+// Function to handle submitting the problem report
+const handleReportButton = (bookingId) => {
+  setSelectedBookingId(bookingId);
+  setShowPopup(true);
+};
+// Function to handle submitting the problem report to the backend
+const handlePopupSubmit = () => {
+  setShowPopup(false);
+  reportProblem(selectedBookingId, detail);
+};
+
+const handleCancelButton = (bookingId) => {
+  setSelectedBookingId(bookingId);
+  setShowDeletePopup(true);
+};
+
+const handlePopupCancelSubmit = () => {
+  setShowDeletePopup(false);
+  cancelBooking(selectedBookingId, detail);
+};
+
+
+
+// Function to report the problem
+const reportProblem = (bookingId, detail) => {
+  axios.put(`http://localhost:8081/reportProblem/${bookingId}`, { detail })
+    .then(response => {
+      alert('Problem reported successfully');
+      // Optional: Update local state or perform any necessary actions
+      fetchBookingHistory(username); // Fetch updated booking history
+    })
+    .catch(error => {
+      console.error('Error reporting problem:', error);
+      alert('Error reporting problem. Please try again later.');
+    });
+};
 
 
 
@@ -146,33 +172,88 @@ const HistoryPage = () => {
       display: 'flex',
       
     }} >
-        <h2 style={{ color: 'white' }}>Booking History</h2><br />
+        <h2 style={{ color: 'black' }}>Booking History</h2><br />
         
-        <ul>
+        <ul className="booking-list">
         <div style={{ margin: '30px auto', width: '80%', display: 'flex',}}>
-          <label htmlFor="filterRoom" style={{ color: 'white' }}>Filter by Room:&nbsp;&nbsp; </label>
+          <label htmlFor="filterRoom" style={{ color: 'black' }}>Filter by Room:&nbsp;&nbsp; </label>
           <input type="text" id="filterRoom" value={roomFilter} onChange={(e) => setRoomFilter(e.target.value)} />
         </div>
-          {sortedHistory.map((booking, index) => (
+        <table className="booking-table">
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Booking ID</th>
+          <th>Room</th>
+          <th>Date & Time</th>
+          <th>Status</th>
+          <th>Check-in</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sortedHistory.map((booking, index) => (
+          <tr key={index}>
+            <td>{index + 1}</td>
+            <td>{booking.booking_id}</td>
+            <td>{booking.room_id} ({booking.building})</td>
+            <td>{booking.start_time} - {booking.end_time}</td>
+            <td>{booking.status}  {(booking.status === 'rejected' || booking.status === 'cancelled') && (
+                          <span>
+                            <br />
+                              <strong>&nbsp; (Detail:</strong> {booking.detail})
+                          </span>
+                          )}
+                    <br /></td>
             
-            <li key={index} style={{ border: '1px solid black', borderRadius: '5px', padding: '10px', marginBottom: '10px' }}>
-              <strong>{index+1} . </strong><br />
-              <strong>Booking ID:</strong> {booking.booking_id}<br />
-              <strong>Room:</strong> {booking.room_id} ({booking.building})<br />
-              <strong>Date & Time:</strong> {booking.start_time} - {booking.end_time}<br />
-              <strong>Check in: </strong> {booking.check_in} <br />
-              
-              {booking.check_in === 'no' && (
-
+            <td>{booking.check_in}</td>
+            <td>
+              {booking.check_in === 'no' && booking.status === 'confirmed' && (
                 <button className="checkin-blue-button" onClick={() => handleCheckIn(booking.booking_id)}>Check In</button>
+              )}&nbsp;
+              {booking.check_in === 'yes' && booking.status !== 'rejected' && booking.status !== 'cancelled' && (
+                <button className="red-button" onClick={() => handleReportButton(booking.booking_id)}>Report Problem</button>
               )}
-              
-              <br /> <button className="yellow-button" onClick={() => cancelBooking(booking.booking_id)}>Cancel Booking</button><br /> <br />
-              
-            </li>
-          ))}
+              {booking.check_in === 'no' && booking.status !== 'rejected' && booking.status !== 'cancelled' && (
+                <button className="yellow-button" onClick={() => handleCancelButton(booking.booking_id)}>Cancel Booking</button>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
         </ul>
+
       </div>
+      {showPopup && (
+        <div className="popup-container">
+        <div className="popup">
+          <h3>Add Detail</h3>
+          <textarea value={detail} onChange={(e) => setDetail(e.target.value)} />
+          <div className="submit-buttons">
+
+            <button onClick={handlePopupSubmit}>Submit</button>
+            <button onClick={() => setShowPopup(false)}>Cancel</button>
+            
+          </div>
+        </div>
+      </div>
+      )}
+      
+      {showDeletePopup && (
+        <div className="popup-container">
+        <div className="popup">
+          <h3>Add Detail</h3>
+          <textarea value={detail} onChange={(e) => setDetail(e.target.value)} />
+          <div className="submit-buttons">
+
+            <button onClick={handlePopupCancelSubmit}>Submit</button>
+            <button onClick={() => setShowDeletePopup(false)}>Cancel</button>
+            
+          </div>
+        </div>
+      </div>
+      )}
     </div>
   );
 };

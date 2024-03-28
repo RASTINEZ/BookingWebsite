@@ -43,7 +43,7 @@ const handleSubmit = async (e) => {
             alert('Login successful'); // Show success message as alert
             setTimeout(() => {
               navigate('/'); // Use navigate directly
-            }, 1000);
+            }, 500);
             localStorage.setItem('username', formData.username);
             
           } else {

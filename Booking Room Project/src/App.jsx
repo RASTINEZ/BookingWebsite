@@ -90,7 +90,7 @@ export const App = () => {
       <NavBar username={username} />
       {/* Building filter dropdown */}
       <div style={{ margin: '30px auto', width: '80%', display: 'flex', textAlign: 'right', justifyContent: 'flex-end', marginRight: '200px' }}>
-        <label htmlFor="filterBuilding"style={{ color: 'white' }}>Filter by Building:</label>
+        <label htmlFor="filterBuilding"style={{ color: 'black' }}>Filter by Building:</label>
         <select
           id="filterBuilding"
           value={buildingFilter}
@@ -104,7 +104,7 @@ export const App = () => {
 
       {/* filter seach bar                                                                   //move to the right */}                                                              
       <div style={{ margin: '30px auto', width: '80%', display: 'flex', textAlign: 'right', justifyContent: 'flex-end', marginRight: '200px'}}>
-          <label htmlFor="filterRoom" style={{ color: 'white' }} >Filter by Room:&nbsp;&nbsp; </label>
+          <label htmlFor="filterRoom" style={{ color: 'black' }} >Filter by Room:&nbsp;&nbsp; </label>
           <input type="text" id="filterRoom" value={roomFilter} onChange={(e) => setRoomFilter(e.target.value)} />
         </div>
       
@@ -120,7 +120,13 @@ export const App = () => {
             content={`Building: ${room.building} <br> Type: ${room.room_type}  <br> Status:🟢${room.available_status} `}
             roomId={room.room_number} // Pass room_number as a prop to Card
             username={username}
-            url={"https://previews.123rf.com/images/rilueda/rilueda1410/rilueda141000244/32842748-modern-lecture-room.jpg"}
+            url={
+              room.room_type === 'Auditorium'
+                ? "https://chicagoplays.com/wp-content/uploads/2018/12/ChicagoPlays-Template-2023-08-15T124140.566.jpg" // Replace with actual auditorium image URL
+                : room.room_type === 'Big(100 seats)'
+                ? "https://www.ecophon.com/globalassets/new-site/media/images/acoustic-solutions/education/university-of-lodz-2.3600x3600.jpg?width=1440&mode=crop&heightratio=0.5&quality=90" // Replace with actual big room image URL
+                : "https://previews.123rf.com/images/rilueda/rilueda1410/rilueda141000244/32842748-modern-lecture-room.jpg" // Default image URL
+            }
              
           />
         ))}

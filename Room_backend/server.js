@@ -256,6 +256,7 @@ app.get('/schedule/:roomId', (req, res) => {
 // Import the email service module
 const { sendEmail } = require('./emailService');
 const { sendEmail2 } = require('./emailService');
+const { sendEmailToAdmin } = require('./emailService');
 
 //update booking endpoint  
 app.put('/bookings/:bookingId', (req, res) => {
@@ -421,25 +422,26 @@ app.get('/bookingHistory', (req, res) => {
 
 
 
-// Assuming you're using Express.js
-app.delete('/cancelBooking/:bookingId', (req, res) => {
-  const { bookingId } = req.params;
-
-  // Perform the cancellation logic, such as updating the database
-  const sql = 'DELETE FROM bookings WHERE booking_id = ?';
-  db.query(sql, [bookingId], (err, result) => {
-    if (err) {
-      console.error('Error cancelling booking:', err);
-      return res.status(500).json({ error: 'An error occurred while cancelling booking' });
-    }
-    // Check if the booking was found and deleted
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Booking not found' });
-    }
-    // Booking successfully cancelled
-    return res.status(200).json({ message: 'Booking cancelled successfully' });
+app.put('/cancelBooking/:bookingId', (req, res) => {
+    const { bookingId } = req.params;
+    const { detail } = req.body; // Assuming the detail is sent in the request body
+  
+    // Perform the cancellation logic, such as updating the database
+    const sql = 'UPDATE bookings SET status = ?, detail = ? WHERE booking_id = ?';
+    db.query(sql, ['cancelled', detail, bookingId], (err, result) => {
+      if (err) {
+        console.error('Error cancelling booking:', err);
+        return res.status(500).json({ error: 'An error occurred while cancelling booking' });
+      }
+      // Check if the booking was found and updated
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Booking not found' });
+      }
+      // Booking successfully cancelled
+      return res.status(200).json({ message: 'Booking cancelled successfully' });
+    });
   });
-});
+  
 
 app.put('/checkinBooking/:bookingId', (req, res) => {
     const { bookingId } = req.params;
@@ -458,6 +460,66 @@ app.put('/checkinBooking/:bookingId', (req, res) => {
     return res.status(200).json({ message: 'Check in successfully' });
   });
 });
+
+
+// Endpoint to report a problem for a specific booking
+app.put('/reportProblem/:bookingId', (req, res) => {
+    const { bookingId } = req.params;
+    const { detail } = req.body;
+
+    // Perform the logic to update the detail in the database
+    const updateDetailQuery = 'UPDATE bookings SET detail = ? WHERE booking_id = ?';
+    db.query(updateDetailQuery, [detail, bookingId], (err, result) => {
+        if (err) {
+            console.error('Error updating detail:', err);
+            return res.status(500).json({ error: 'An error occurred while updating detail' });
+        }
+        // Check if the booking was found and updated
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+        
+        // Get the room_id for the booking
+        const getRoomIdQuery = 'SELECT room_id FROM bookings WHERE booking_id = ?';
+        db.query(getRoomIdQuery, [bookingId], (err, rows) => {
+            if (err) {
+                console.error('Error fetching room_id:', err);
+                return res.status(500).json({ error: 'An error occurred while fetching room_id' });
+            }
+            
+            if (rows.length === 0) {
+                return res.status(404).json({ error: 'Booking not found' });
+            }
+            
+            const roomId = rows[0].room_id;
+            // Booking detail successfully updated
+            // Now, send an email to the admin
+            sendEmailToAdmin(bookingId, roomId, detail);
+            return res.status(200).json({ message: 'Booking detail updated successfully' });
+        });
+    });
+});
+
+  
+  
+  app.put('/checkinBooking/:bookingId', (req, res) => {
+      const { bookingId } = req.params;
+  
+    // Perform the cancellation logic, such as updating the database
+    db.query('UPDATE bookings SET check_in = ? WHERE booking_id = ?', ['yes', bookingId], (err, result) => {
+      if (err) {
+        console.error('Error check in booking:', err);
+        return res.status(500).json({ error: 'An error occurred while checking in booking' });
+      }
+      // Check if the booking was found and deleted
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Booking not found' });
+      }
+      // Booking successfully cancelled
+      return res.status(200).json({ message: 'Check in successfully' });
+    });
+  });
+  
 
 
 // Backend route to update booking status
