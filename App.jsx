@@ -50,6 +50,7 @@ export const App = () => {
 
   const handleBuildingChange = (e) => {
     setBuildingFilter(e.target.value);
+    setFloorFilter(""); // Reset floorFilter when buildingFilter changes
   };
 
   const handleFloorChange = (e) => {
@@ -67,8 +68,8 @@ export const App = () => {
       );
     }
 
-    if (floorFilter !== "") {
-      // Filter rooms based on floorFilter value (7 or 8)
+    if (buildingFilter === "SC45" && floorFilter !== "") {
+      // Filter rooms based on floorFilter value (7 or 8) only when buildingFilter is SC45
       filtered = filtered.filter((room) =>
         room.room_number.startsWith(floorFilter)
       );
