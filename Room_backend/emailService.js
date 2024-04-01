@@ -70,7 +70,7 @@ const sendEmail = (email, username, room_Id, start_Time, end_Time, status, booki
   });
 };
 
-const sendEmail2 = (email, username, room_Id, date, start_Time, end_Time, status, bookingId) => {
+const sendEmail2 = (email, username, room_Id, date, start_Time, end_Time, status, bookingId, reason) => {
    // Log start_Time and end_Time
    console.log('start_Time:', start_Time);
    console.log('end_Time:', end_Time);
@@ -78,7 +78,8 @@ const sendEmail2 = (email, username, room_Id, date, start_Time, end_Time, status
    let emailText = `Hello ${username},\n`;
    emailText += `Your booking status is: ${status}\n`;
    emailText += `for Room ${room_Id} from ${formatDate(date)}${formatTime(start_Time)} to ${formatDate(date)}${formatTime(end_Time)}\n`;
-   emailText += `(Booking ID: ${bookingId})`;
+   emailText += `(Booking ID: ${bookingId}, `;
+   emailText += `Booking Reason: ${reason})`;
 
   // Example email options
   const mailOptions = {

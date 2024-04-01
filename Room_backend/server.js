@@ -312,7 +312,7 @@ app.put('/bookings/:bookingId', (req, res) => {
 
 // Endpoint to add bookings to the database
 app.post('/bookings2', (req, res) => {
-    const { roomId, date, selectedSlots, username } = req.body;
+    const { roomId, date, selectedSlots, username, reason } = req.body;
 
     // Retrieve user's role based on the username
     const getRoleSql = "SELECT role FROM users WHERE username = ?";
@@ -327,13 +327,13 @@ app.post('/bookings2', (req, res) => {
         const userRole = roleResults[0].role;
 
         // Insert bookings into the database
-        const insertSql = "INSERT INTO bookings (room_id, start_time, end_time, booked_by, status) VALUES (?, ?, ?, ?, ?)";
+        const insertSql = "INSERT INTO bookings (room_id, start_time, end_time, booked_by, status, booking_reason) VALUES (?, ?, ?, ?, ?, ?)";
         selectedSlots.forEach(slot => {
             let status = 'Pending';
             if (userRole === 'teacher' || userRole === 'admin') {
                 status = 'Confirmed';
             }
-            db.query(insertSql, [roomId, `${date} ${slot.startTime}`, `${date} ${slot.endTime}`, username, status], (insertErr, result) => {
+            db.query(insertSql, [roomId, `${date} ${slot.startTime}`, `${date} ${slot.endTime}`, username, status, reason], (insertErr, result) => {
                 if (insertErr) {
                     console.error('Error inserting booking:', insertErr);
                     return res.status(500).json({ error: 'An error occurred while inserting booking' });
@@ -362,7 +362,7 @@ app.post('/bookings2', (req, res) => {
                         const userEmail = emailResults[0].email;
 
                         // Send email after booking is successfully created
-                        sendEmail2(userEmail, username, roomId, date, slot.startTime, slot.endTime, status, bookingId);
+                        sendEmail2(userEmail, username, roomId, date, slot.startTime, slot.endTime, status, bookingId, reason);
                     });
                 });
             });
@@ -443,33 +443,38 @@ app.put('/cancelBooking/:bookingId', (req, res) => {
   });
   
 
-app.put('/checkinBooking/:bookingId', (req, res) => {
+  app.put('/checkinBooking/:bookingId', (req, res) => {
     const { bookingId } = req.params;
 
-  // Perform the cancellation logic, such as updating the database
-  db.query('UPDATE bookings SET check_in = ? WHERE booking_id = ?', ['yes', bookingId], (err, result) => {
-    if (err) {
-      console.error('Error check in booking:', err);
-      return res.status(500).json({ error: 'An error occurred while checking in booking' });
-    }
-    // Check if the booking was found and deleted
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Booking not found' });
-    }
-    // Booking successfully cancelled
-    return res.status(200).json({ message: 'Check in successfully' });
-  });
+    // Perform the check-in logic and update the checkin_time column using MySQL's NOW() function
+    db.query('UPDATE bookings SET check_in = ?, checkin_time = NOW() WHERE booking_id = ?', ['yes', bookingId], (err, result) => {
+        if (err) {
+            console.error('Error checking in booking:', err);
+            return res.status(500).json({ error: 'An error occurred while checking in booking' });
+        }
+        // Check if the booking was found and updated
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+        // Booking successfully checked in
+        return res.status(200).json({ message: 'Check in successful' });
+    });
 });
+
+  
 
 
 // Endpoint to report a problem for a specific booking
 app.put('/reportProblem/:bookingId', (req, res) => {
     const { bookingId } = req.params;
-    const { detail } = req.body;
+    const { topic, detail } = req.body;
+
+    // Concatenate the topic with the existing detail
+    const updatedDetail = `${topic}: ${detail}`;
 
     // Perform the logic to update the detail in the database
     const updateDetailQuery = 'UPDATE bookings SET detail = ? WHERE booking_id = ?';
-    db.query(updateDetailQuery, [detail, bookingId], (err, result) => {
+    db.query(updateDetailQuery, [updatedDetail, bookingId], (err, result) => {
         if (err) {
             console.error('Error updating detail:', err);
             return res.status(500).json({ error: 'An error occurred while updating detail' });
@@ -494,7 +499,7 @@ app.put('/reportProblem/:bookingId', (req, res) => {
             const roomId = rows[0].room_id;
             // Booking detail successfully updated
             // Now, send an email to the admin
-            sendEmailToAdmin(bookingId, roomId, detail);
+            sendEmailToAdmin(bookingId, roomId, updatedDetail);
             return res.status(200).json({ message: 'Booking detail updated successfully' });
         });
     });

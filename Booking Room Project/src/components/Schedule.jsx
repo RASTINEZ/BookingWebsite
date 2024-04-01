@@ -18,6 +18,11 @@ const Schedule = ({}) => {
   const [imagePath, setImagePath] = useState(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [role, setRole] = useState('');
+  const [showReasonPopup, setShowReasonPopup] = useState(false);
+  const [reason, setReason] = useState('');
+  const [start, setStart] = useState('');
+  const [end, setEnd] = useState('');
+  const [selectedSlot, setSelectedSlot] = useState(null); 
 
   useEffect(() => {
 
@@ -246,6 +251,31 @@ const isSlotAvailableForAdmin = (slot) => {
 //   // Allow booking for any date after tomorrow
 //   return true;
 // };
+const handleReasonButton = () => {
+  
+  setShowReasonPopup(true);
+};
+const handleReasonSubmit = () => {
+  // Handle submitting the reason for booking
+  console.log('Reason:', reason);
+  // Close the popup
+  setShowReasonPopup(false);
+  addBookings();
+};
+
+const handleAddBooking = () => {
+  const slot = { startTime: start, endTime: end };
+  setSelectedSlot(slot); // Store the selected slot
+  handleBooking(slot);
+};
+const handleCancel = () => {
+  const slot = { startTime: start, endTime: end };
+  handleRemoveBooking(slot);
+  setSelectedSlot(null);
+  setSelectedSlots([]);
+  
+  
+};
 
 
 
@@ -286,6 +316,7 @@ const addBookings = () => {
       date: moment(date).format('YYYY-MM-DD'),
       selectedSlots: selectedSlots,
       username: username,
+      reason: reason,
     }),
   })
     .then(response => {
@@ -306,6 +337,26 @@ const addBookings = () => {
     });
 };
 
+const generateTimeOptions = () => {
+  const options = [];
+  const startTime = moment().startOf('day').add(7, 'hours'); // Start time at 07:00 AM
+  const endTime = moment().startOf('day').add(20, 'hours'); // End time at 08:00 PM
+
+  while (startTime.isSameOrBefore(endTime)) {
+    options.push(
+      <option key={startTime.format('HH:mm')} value={startTime.format('HH:mm')}>
+        {startTime.format('HH:mm')} {/* Use 24-hour format */}
+      </option>
+    );
+    startTime.add(30, 'minutes');
+  }
+
+  return options;
+};
+
+
+
+
 
 
 
@@ -313,7 +364,7 @@ const addBookings = () => {
     <div>
       <NavBar username={username} />
       <div className="d-flex justify-content-center align-items-center flex-column">
-        <h2 style={{ color: 'white' }}>Schedule of the Room {roomId}</h2>
+        <h2 style={{ color: 'black' }}>Schedule of the Room {roomId}</h2>
         <div className="d-flex justify-content-center align-items-center">
     <div className="text-center mr-4"style={{ marginRight: '50px' }}>
       <Calendar onChange={onChange} value={date} /> 
@@ -326,24 +377,65 @@ const addBookings = () => {
       )}
       </div>
     </div>
+    <div>
+    <div style={{ marginBottom: "20px" }}></div>
         
-        <div>
-          <h4 style={{ color: 'white' }} >Selected Time Slots:</h4>
-          <ul>
-            {selectedSlots.map((slot, index) => (
-              <li key={index}>
-                {moment(date).format('YYYY-MM-DD')} {slot.startTime} - {slot.endTime}
-              </li>
-            ))}
+    
+    <div className="form-group d-flex" style={{marginRight: "20px"}}>
+  <div className="mr-3">
+    <label htmlFor="startTime" style={{ color: 'black', paddingRight: "30px" }}>Start Time:</label>
+    <select id="startTime" value={start} onChange={(e) => setStart(e.target.value)}>
+      <option value="">Select Start Time</option>
+      {generateTimeOptions()}
+    </select>
+  </div>
+  <div>
+    <label htmlFor="endTime" style={{ color: 'black' }}>End Time:</label>
+    <select id="endTime" value={end} onChange={(e) => setEnd(e.target.value)}>
+      <option value="">Select End Time</option>
+      {generateTimeOptions()}
+    </select>
+  </div>
+</div>
 
-            {/* Button to add selected time slots (conditionally rendered) */}
-            {selectedSlots.length > 0 && (
-            <button className='blue-button' onClick={addBookings}>Confirm Bookings</button>
-            )}
-              
-          </ul>
+          
+          <div className="form-group">
+          <button style={{marginLeft: "55px"}} className='custom-button ' onClick={() => handleAddBooking()}>Add</button>
+          <button style={{marginLeft: "10px"}}className='yellow-button ' onClick={() => handleCancel()}>Clear</button>
+          </div>
+          
+
+          
         </div>
-        <h3 style={{ color: 'white' }} >Available Time Slots for {moment(date).format('YYYY-MM-DD')} (Asia/Bangkok Time)</h3>
+       
+        {selectedSlots.length > 0 && (
+  <div>
+    <h4 style={{ color: 'black' }}>Selected Time Slots:</h4>
+    <ul>
+      {selectedSlots.map((slot, index) => (
+        <li key={index}>
+          {moment(date).format('YYYY-MM-DD')} {slot.startTime} - {slot.endTime}
+        </li>
+      ))}
+    </ul>
+    <button style={{marginLeft: "20px"}} className='blue-button' onClick={() => handleReasonButton()}>Confirm Bookings</button>
+  </div>
+)}
+
+        {/* Reason popup */}
+      {showReasonPopup && (
+        <div className="popup-container">
+          <div className="popup">
+          <h3>Enter Reason for Booking</h3>
+          <textarea value={reason} onChange={(e) => setReason(e.target.value)} />
+          <div className="submit-buttons" style={{ display: 'flex', justifyContent: 'center' }}>
+            <button onClick={handleReasonSubmit}>Submit</button>
+            <button onClick={() => setShowReasonPopup(false)}>Cancel</button>
+          </div>
+          </div>
+        </div>
+      )}
+      <h3 style={{ color: 'black' }} >Available Time Slots for {moment(date).format('YYYY-MM-DD')} (Asia/Bangkok Time)</h3>
         <table >
           <thead>
             <tr>
@@ -380,8 +472,13 @@ const addBookings = () => {
             ))}
           </tbody>
         </table>
+        
+        
+       
       </div>
+      
     </div>
+    
   );
 };
 

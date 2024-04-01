@@ -16,6 +16,7 @@ export const App = () => {
   const [roomFilter, setRoomFilter] = useState(''); // Default room filter value
   const [filteredHistory, setFilteredHistory] = useState([]);
   const [buildingFilter, setBuildingFilter] = useState('All'); // State variable for building filter
+  const [floorFilter, setFloorFilter] = useState("");
 
 
 
@@ -45,7 +46,7 @@ export const App = () => {
 
   useEffect(() => {
     filterHistory();
-  }, [data, filterOption, roomFilter]);
+  }, [data, filterOption, roomFilter, floorFilter]);
 
 
   useEffect(() => {
@@ -62,6 +63,9 @@ export const App = () => {
   const handleBuildingChange = (e) => {
     setBuildingFilter(e.target.value);
   };
+  const handleFloorChange = (e) => {
+    setFloorFilter(e.target.value);
+  };
 
 
   const filterHistory = () => {
@@ -73,6 +77,12 @@ export const App = () => {
       // Convert room_id to string and then apply toLowerCase()
       const roomFilterLower = roomFilter.toLowerCase();
       filtered = filtered.filter(room => `${room.room_number}`.toLowerCase().includes(roomFilterLower));
+    }
+    if (buildingFilter === "SC45" && floorFilter !== "") {
+      // Filter rooms based on floorFilter value (7 or 8) only when buildingFilter is SC45
+      filtered = filtered.filter((room) =>
+        room.room_number.startsWith(floorFilter)
+      );
     }
   
     setFilteredHistory(filtered);
@@ -86,11 +96,24 @@ export const App = () => {
 
 
   return (
-    <div >
+    <div>
       <NavBar username={username} />
       {/* Building filter dropdown */}
-      <div style={{ margin: '30px auto', width: '80%', display: 'flex', textAlign: 'right', justifyContent: 'flex-end', marginRight: '200px' }}>
-        <label htmlFor="filterBuilding"style={{ color: 'black' }}>Filter by Building:</label>
+      <div
+        style={{
+          margin: "30px auto",
+          width: "80%",
+          display: "flex",
+          textAlign: "right",
+          justifyContent: "flex-end",
+          marginRight: "200px",
+          paddingBottom: "1px",
+          paddingRight: "100px",
+        }}
+      >
+        <label htmlFor="filterBuilding" style={{ color: "black" }}>
+          Filter by Building:
+        </label>
         <select
           id="filterBuilding"
           value={buildingFilter}
@@ -102,18 +125,66 @@ export const App = () => {
         </select>
       </div>
 
-      {/* filter seach bar                                                                   //move to the right */}                                                              
-      <div style={{ margin: '30px auto', width: '80%', display: 'flex', textAlign: 'right', justifyContent: 'flex-end', marginRight: '200px'}}>
-          <label htmlFor="filterRoom" style={{ color: 'black' }} >Filter by Room:&nbsp;&nbsp; </label>
-          <input type="text" id="filterRoom" value={roomFilter} onChange={(e) => setRoomFilter(e.target.value)} />
+      {/* Filter search bar */}
+      <div
+        style={{
+          margin: "30px auto",
+          width: "80%",
+          display: "flex",
+          textAlign: "right",
+          justifyContent: "flex-end",
+          marginRight: "100px",
+        }}
+      >
+        {/* Filter by Floor */}
+        {buildingFilter === "SC45" && (
+          <div style={{
+            margin: "30px auto",
+            width: "80%",
+            display: "flex",
+            textAlign: "right",
+            justifyContent: "flex-end",
+            marginLeft: "700px",
+          }}>
+            <label htmlFor="filterFloor" style={{ color: "black" }}>
+              Filter by Floor: &nbsp;
+            </label>
+            <select
+              id="filterFloor"
+              value={floorFilter}
+              onChange={handleFloorChange}
+            >
+              <option value="">All</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+            </select>
+          </div>
+        )}
+
+        {/* Filter by Room */}
+        <div style={{
+          margin: "30px auto",
+          width: "80%",
+          display: "flex",
+          textAlign: "right",
+          justifyContent: "flex-end",
+          marginLeft: "10px",
+          marginRight: "190px",
+        }}>
+          <label htmlFor="filterRoom" style={{ color: "black" }}>
+            Filter by Room:&nbsp;&nbsp;
+          </label>
+          <input
+            type="text"
+            id="filterRoom"
+            value={roomFilter}
+            onChange={(e) => setRoomFilter(e.target.value)}
+          />
         </div>
-      
+      </div>
+
       <div className="container">
-      
-        
-        
         {filteredHistory.map((room, index) => (
-          
           <Card
             key={index}
             title={`Room ${room.room_number}`}
@@ -121,49 +192,46 @@ export const App = () => {
             roomId={room.room_number} // Pass room_number as a prop to Card
             username={username}
             url={
-              room.room_type === 'Meeting Room'
+              room.room_type === "Meeting Room"
                 ? "https://cdn.shopify.com/s/files/1/0605/0136/0804/files/Modern_meeting_room_with_advanced_technology.jpg?v=1703751846" // Replace with actual auditorium image URL
-                : room.room_type === 'Big(100 seats)'
+                : room.room_type === "Big(100 seats)"
                 ? "https://media.licdn.com/dms/image/C4E12AQF5Rrnjk24OzQ/article-cover_image-shrink_720_1280/0/1579964780563?e=2147483647&v=beta&t=iEt5jbkYuJvxyC0yp8NJmDqTqgI8wXZB4eG4ZZ5xYxc" // Replace with actual big room image URL
                 : "https://previews.123rf.com/images/rilueda/rilueda1410/rilueda141000244/32842748-modern-lecture-room.jpg" // Default image URL
             }
-             
           />
         ))}
       </div>
 
-      <div style={{ marginBottom: '20px' }}></div>
-
+      <div style={{ marginBottom: "20px" }}></div>
 
       {maintainRooms.length > 0 && (
-      <div className="maintain-rooms-container">
-      <h3>Rooms Under Maintenance ⚠️</h3>
-      </div>
+        <div className="maintain-rooms-container">
+          <h3>Rooms Under Maintenance ⚠️</h3>
+        </div>
       )}
-      
 
       <div className="maintain-rooms-container2">
-      <ul className="maintain-rooms-list">
-        {maintainRooms.map((room, index) => (
-
-          
-          <li key={index}>
-            
-            <span className="room">Room:</span>{room.room_number}({room.building})
-
-
-            <span className="details"> Details:</span> {room.details}
-           
-           
-           </li>
-        ))}
+        <ul className="maintain-rooms-list">
+          {maintainRooms.map((room, index) => (
+            <li key={index}>
+              <span className="room">Room:</span>
+              {room.room_number}({room.building})
+              <span className="details"> Details:</span> {room.details}
+            </li>
+          ))}
         </ul>
       </div>
-    
-    <br/><br/><br/><br/><br/><br/><br/><br/>
 
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
   );
-}
+};
 
 export default App;

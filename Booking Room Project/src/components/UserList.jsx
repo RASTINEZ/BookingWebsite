@@ -123,7 +123,9 @@ return (
             ))}
           </tbody>
         </table>
+        
       </div>
+      <div style={{ marginBottom: "20px" }}></div>
       </div>
       
   )

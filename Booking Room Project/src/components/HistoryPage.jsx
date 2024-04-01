@@ -16,6 +16,8 @@ const HistoryPage = () => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState('');
   const [detail, setDetail] = useState('');
+  const [selectedTopic, setSelectedTopic] = useState('');
+  const [selectedCancelTopic, setSelectedCancelTopic] = useState('');
   
 
   useEffect(() => {
@@ -125,8 +127,10 @@ const handleReportButton = (bookingId) => {
 };
 // Function to handle submitting the problem report to the backend
 const handlePopupSubmit = () => {
+  console.log('Selected Topic:', selectedTopic);
+  console.log('Detail:', detail);
   setShowPopup(false);
-  reportProblem(selectedBookingId, detail);
+  reportProblem(selectedBookingId, selectedTopic, detail);
 };
 
 const handleCancelButton = (bookingId) => {
@@ -142,8 +146,8 @@ const handlePopupCancelSubmit = () => {
 
 
 // Function to report the problem
-const reportProblem = (bookingId, detail) => {
-  axios.put(`http://localhost:8081/reportProblem/${bookingId}`, { detail })
+const reportProblem = (bookingId, topic, detail) => {
+  axios.put(`http://localhost:8081/reportProblem/${bookingId}`, { topic, detail })
     .then(response => {
       alert('Problem reported successfully');
       // Optional: Update local state or perform any necessary actions
@@ -206,7 +210,19 @@ const reportProblem = (bookingId, detail) => {
                           )}
                     <br /></td>
             
-            <td>{booking.check_in}</td>
+            <td>{booking.check_in === 'yes' ? (
+              <span>
+                
+                  <strong>&nbsp; Time:</strong> ({formatDateAndTime(booking.checkin_time)})
+                </span>
+                ) : (
+                <span>
+                  
+                   Not Checked-in
+                      </span>
+                    )}
+                  <br />
+                </td>
             <td>
               {booking.check_in === 'no' && booking.status === 'confirmed' && (
                 <button className="checkin-blue-button" onClick={() => handleCheckIn(booking.booking_id)}>Check In</button>
@@ -225,19 +241,32 @@ const reportProblem = (bookingId, detail) => {
         </ul>
 
       </div>
+      {/* Report Popup */}
       {showPopup && (
         <div className="popup-container">
-        <div className="popup">
-          <h3>Add Detail</h3>
-          <textarea value={detail} onChange={(e) => setDetail(e.target.value)} />
-          <div className="submit-buttons">
-
-            <button onClick={handlePopupSubmit}>Submit</button>
-            <button onClick={() => setShowPopup(false)}>Cancel</button>
+          <div className="popup">
+            <h3>Report Issue</h3>
+            <label htmlFor="topicSelect">Select Topic:</label>
             
+            <select id="topicSelect" value={selectedTopic} onChange={(e) => setSelectedTopic(e.target.value)}>
+              
+              <option value="Electricity Issue">ปัญหาด้านไฟฟ้า</option>
+              <option value="Room Issue">ปัญหาคุณภาพของห้อง</option>
+              <option value="Other">Other</option>
+              
+            </select>
+            <div style={{ marginBottom: '10px' }}></div>
+            <textarea
+              value={detail}
+              onChange={(e) => setDetail(e.target.value)}
+              placeholder="Enter details..."
+            />
+            <div className="submit-buttons"style={{ display: 'flex', justifyContent: 'center' }}>
+              <button onClick={handlePopupSubmit}>Report</button>
+              <button onClick={() => setShowPopup(false)}>Cancel</button>
+            </div>
           </div>
         </div>
-      </div>
       )}
       
       {showDeletePopup && (
@@ -245,7 +274,7 @@ const reportProblem = (bookingId, detail) => {
         <div className="popup">
           <h3>Add Detail</h3>
           <textarea value={detail} onChange={(e) => setDetail(e.target.value)} />
-          <div className="submit-buttons">
+          <div className="submit-buttons"style={{ display: 'flex', justifyContent: 'center' }}>
 
             <button onClick={handlePopupCancelSubmit}>Submit</button>
             <button onClick={() => setShowDeletePopup(false)}>Cancel</button>
