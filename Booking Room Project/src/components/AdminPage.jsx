@@ -3,6 +3,7 @@ import axios from 'axios';
 import NavBar from './NavBar';
 import UserList from './UserList';
 import BookingList from './BookingList';
+import RoomsPage from './RoomsPage';
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
@@ -61,11 +62,12 @@ const AdminPage = () => {
   <div className="admin-container" style={{ textAlign: 'center' }}>
     
     <div className="select-option">
-    <h2 style={{ textAlign: 'center', color: 'black' }}>Admin Panel</h2>
+    <h1 style={{ textAlign: 'center', color: 'black' }}>Admin Panel</h1>
       <label htmlFor="option" style={{ color: 'black' }}>Select Option: &nbsp; </label>
       <select id="option" value={selectedOption} onChange={(e) => handleOptionChange(e.target.value)}>
         <option value="User List">User List</option>
         <option value="Booking List">Booking List</option>
+        <option value="Rooms Page">Rooms Page</option>
       </select>
 
       {selectedOption === 'User List' && (
@@ -78,6 +80,12 @@ const AdminPage = () => {
       <div style={{ textAlign: 'center', color: 'black' }}>
         
         <BookingList bookings={bookings} handleStatusChange={handleStatusChange} />
+      </div>
+    )}
+    {selectedOption === 'Rooms Page' && (
+      <div style={{ textAlign: 'center', color: 'black' }}>
+        
+        <RoomsPage  />
       </div>
     )}
     </div>

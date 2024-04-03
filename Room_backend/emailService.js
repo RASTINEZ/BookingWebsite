@@ -125,6 +125,33 @@ const sendEmailToAdmin = (bookingId, roomId, detail) => {
   });
 };
 
+const sendEmailToUsers = (emails, subject, message) => {
+  return new Promise((resolve, reject) => {
+      // Send emails to each recipient
+      for (const email of emails) {
+          const mailOptions = {
+              from: 'COM-SCI Room Service @KU" <kuroomservice@hotmail.com>', // Sender's name and email address
+              to: email,
+              subject: subject,
+              text: message,
+          };
+
+          transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                  console.error('Error sending email:', error);
+                  reject(error); // Reject the promise if an error occurs
+              } else {
+                  console.log('Email sent:', info.response);
+                  resolve(); // Resolve the promise if email sent successfully
+              }
+          });
+      }
+  });
+};
+
+
+
+
 
 module.exports = { sendEmail,
-   sendEmail2, sendEmailToAdmin };
+   sendEmail2, sendEmailToAdmin, sendEmailToUsers };

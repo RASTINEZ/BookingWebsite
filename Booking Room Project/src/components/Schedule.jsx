@@ -20,9 +20,20 @@ const Schedule = ({}) => {
   const [role, setRole] = useState('');
   const [showReasonPopup, setShowReasonPopup] = useState(false);
   const [reason, setReason] = useState('');
+  const [detail, setDetail] = useState('');
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
   const [selectedSlot, setSelectedSlot] = useState(null); 
+  const [bookedSlots, setBookedSlots] = useState([]);
+  const reasonOptions = [
+    "เกี่ยวกับการเรียน",
+    "Meeting",
+    "Presentation",
+    "Workshop",
+    "Training",
+    "Other"
+  ];
+  
 
   useEffect(() => {
 
@@ -75,13 +86,14 @@ const Schedule = ({}) => {
         selectedSlot.startTime === slot.startTime &&
         selectedSlot.endTime === slot.endTime
     );
-
+  
     if (!isSlotSelected) {
       setSelectedSlots([...selectedSlots, slot]);
     } else {
       handleRemoveBooking(slot);
     }
   };
+  
 
   const handleRemoveBooking = (slot) => {
     const updatedSelectedSlots = selectedSlots.filter(
@@ -112,23 +124,51 @@ const Schedule = ({}) => {
     const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
     fetch(`http://localhost:8081/schedule/${roomId}?date=${formattedDate}`)
         .then(response => response.json())
-        .then(bookedSlots => {
+        .then(bookedSlotsData => {
             const allSlots = generateTimeSlots();
-            bookedSlots.forEach(bookedSlot => {
-                const bookedStartTime = moment(bookedSlot.startTime).format('HH:mm');
-                const bookedEndTime = moment(bookedSlot.endTime).format('HH:mm');
-                allSlots.forEach(slot => {
+            const currentTime = moment();
+            const formattedBookedSlots = bookedSlotsData.map(slot => ({
+                startTime: moment(slot.startTime).format('HH:mm'),
+                endTime: moment(slot.endTime).format('HH:mm')
+            }));
+            setBookedSlots(formattedBookedSlots);
+            allSlots.forEach(slot => {
+                formattedBookedSlots.forEach(bookedSlot => {
                     const slotStartTime = slot.startTime;
                     const slotEndTime = slot.endTime;
-                    if (slotStartTime >= bookedStartTime && slotEndTime <= bookedEndTime) {
+
+                    if (role === 'user') {
+                    if (slotStartTime >= bookedSlot.startTime && slotEndTime <= bookedSlot.endTime) {
                         slot.available = false;
                     }
+                    // Check if the slot's start time is before the current time
+                    if (moment(`${formattedDate} ${slot.startTime}`).isBefore(currentTime)) {
+                              // Mark the slot as unavailable
+                            slot.available = false;
+                    }
+                    // Check if the selected date is the current date
+                    if (moment(formattedDate).isSame(currentTime, 'day')) {
+                         // Mark all slots as unavailable if it's the current day
+                        slot.available = false;
+                    }
+
+                   // Check if the current time is between 8 PM and 7 AM
+                    if (currentTime.format('HH:mm') >= '20:00' || currentTime.format('HH:mm') < '07:00') {
+                                 // Check if the slot starts before 12 AM of the next day
+                              if (moment(`${formattedDate} ${slot.startTime}`).isBefore(moment(formattedDate).add(1, 'day').startOf('day'))) {
+                                  // Mark the slot as unavailable
+                                  slot.available = false;
+                                    }
+                        }
+                    }  else {
+                      if (slotStartTime >= bookedSlot.startTime && slotEndTime <= bookedSlot.endTime) {
+                        slot.available = false;
+                    }
+                      
+                  }    
+
                 });
             });
-            // Update availability of time slots based on current time
-            allSlots.forEach(slot => {
-              slot.available = role === 'admin' || role === 'mod'|| role === 'teacher' ? isSlotAvailableForAdmin(slot) : isSlotAvailable(slot);
-          });
             setTimeSlots(allSlots);
         })
         .catch(error => {
@@ -137,84 +177,12 @@ const Schedule = ({}) => {
         });
 };
 
+
+
+
+
 // Function to check if a slot is available for booking based on current time
-const isSlotAvailable = (slot) => {
-  const currentDate = moment(); // Get the current date and time
-  const selectedDate = moment(date).startOf('day'); // Get the selected date
-  
-  // Get tomorrow's date
-  const tomorrowDate = moment().add(1, 'day').startOf('day');
 
-  // Check if the selected date is tomorrow
-  if (selectedDate.isSame(tomorrowDate, 'day')) {
-    // Parse slot start time
-    const slotStartTime = moment(slot.startTime, 'HH:mm');
-
-    // Check if the slot start time is after 12:00 PM
-    if (slotStartTime.isAfter(moment().startOf('day').add(12, 'hours'))) {
-      return true; // Slot is available if it's after 12:00 PM for tomorrow
-    }
-    // Slot is not available if it's before 12:00 PM for tomorrow
-    return false;
-  }
-
-  // Check if the selected date is today and the slot time is in the past
-  if (selectedDate.isSame(currentDate, 'day')) {
-    // Parse slot start time
-    const slotStartTime = moment(slot.startTime, 'HH:mm');
-
-    // Check if the slot start time is before the current time
-    if (slotStartTime.isBefore(currentDate)) {
-      return false; // Slot is not available if it's in the past for today
-    }
-    return true; // Slot is available if it's in the future for today
-  }
-  if (selectedDate.isBefore(currentDate, 'day')) {
-
-    return false;
-
-
-  }
-
-
-
-
-
-  // Allow booking for any date after tomorrow
-  return true;
-};
-// Function to check if a slot is available for booking based on current time
-const isSlotAvailableForAdmin = (slot) => {
-  const currentDate = moment(); // Get the current date and time
-  const selectedDate = moment(date).startOf('day'); // Get the selected date
-  
-  
-
-  // Check if the selected date is today and the slot time is in the past
-  if (selectedDate.isSame(currentDate, 'day')) {
-    // Parse slot start time
-    const slotStartTime = moment(slot.startTime, 'HH:mm');
-
-    // Check if the slot start time is before the current time
-    if (slotStartTime.isBefore(currentDate)) {
-      return true; // Slot is not available if it's in the past for today
-    }
-    return true; // Slot is available if it's in the future for today
-  }
-  if (selectedDate.isBefore(currentDate, 'day')) {
-
-    return false;
-
-
-  }
-
-
-
-
-
-  // Allow booking for any date after tomorrow
-  return true;
-};
 
 // const isSlotAvailable = (slot) => {
 //   const currentDate = moment(); // Get the current date and time
@@ -252,22 +220,72 @@ const isSlotAvailableForAdmin = (slot) => {
 //   return true;
 // };
 const handleReasonButton = () => {
-  
+  // Check if any selected slot overlaps with booked slots or is marked as unavailable
+  const isAnySlotUnavailable = selectedSlots.some(slot => {
+    // Check if the slot is marked as unavailable
+    if (!slot.available) {
+      return true; // Slot is unavailable, return true
+    }
+
+    // Check if the slot overlaps with any booked slot
+    return bookedSlots.some(bookedSlot => {
+      return (
+        (bookedSlot.startTime <= slot.startTime && bookedSlot.endTime > slot.startTime) || // Check if start time overlaps
+        (bookedSlot.startTime < slot.endTime && bookedSlot.endTime >= slot.endTime) // Check if end time overlaps
+      );
+    });
+  });
+
+  if (isAnySlotUnavailable) {
+    console.error('One or more selected slots are unavailable.');
+    alert('One or more selected time slots are already booked or unavailable. Please choose another time slot.');
+    return;
+  }
+
   setShowReasonPopup(true);
 };
+
+
+
+
+
+
+
 const handleReasonSubmit = () => {
-  // Handle submitting the reason for booking
+  
+
+  // If all selected slots are available, proceed with booking
   console.log('Reason:', reason);
-  // Close the popup
   setShowReasonPopup(false);
   addBookings();
 };
 
+
+
+
 const handleAddBooking = () => {
-  const slot = { startTime: start, endTime: end };
-  setSelectedSlot(slot); // Store the selected slot
+  const slot = { startTime: start, endTime: end, available: true };
+
+  // Check if the slot is already booked
+  const isSlotBooked = bookedSlots.some(
+    (bookedSlot) =>
+      bookedSlot.startTime === slot.startTime &&
+      bookedSlot.endTime === slot.endTime
+  );
+
+  if (isSlotBooked) {
+    console.error('The selected slot is already booked !.');
+    alert('One or more selected time slots are already booked or unavailable. Please choose another time slot.');
+    // Handle error, e.g., show an error message to the user
+    return;
+  }
+
+  // If the slot is not booked, add it to the selectedSlots array
   handleBooking(slot);
 };
+
+
+
 const handleCancel = () => {
   const slot = { startTime: start, endTime: end };
   handleRemoveBooking(slot);
@@ -316,7 +334,7 @@ const addBookings = () => {
       date: moment(date).format('YYYY-MM-DD'),
       selectedSlots: selectedSlots,
       username: username,
-      reason: reason,
+      reason: reason + detail,
     }),
   })
     .then(response => {
@@ -425,9 +443,25 @@ const generateTimeOptions = () => {
         {/* Reason popup */}
       {showReasonPopup && (
         <div className="popup-container">
-          <div className="popup">
+        <div className="popup">
           <h3>Enter Reason for Booking</h3>
-          <textarea value={reason} onChange={(e) => setReason(e.target.value)} />
+          <label htmlFor="reasonSelect">Select Reason:</label>
+          <select id="reasonSelect" value={reason} onChange={(e) => setReason(e.target.value)}>
+            <option value="">Select Reason</option>
+            {reasonOptions.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <div style={{ marginBottom: '10px' }}></div>
+          <label htmlFor="detailTextarea">Details:</label>
+          <textarea
+            id="detailTextarea"
+            value={detail}
+            onChange={(e) => setDetail(e.target.value)}
+            placeholder="โปรดใส่รหัสวิชา..."
+          />
           <div className="submit-buttons" style={{ display: 'flex', justifyContent: 'center' }}>
             <button onClick={handleReasonSubmit}>Submit</button>
             <button onClick={() => setShowReasonPopup(false)}>Cancel</button>

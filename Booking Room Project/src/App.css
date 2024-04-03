@@ -272,6 +272,11 @@ tr:nth-child(even) {
   width: 100%;
   background-color: #070F2B;
 }
+.room-table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #069625;
+}
 
 .user-column {
   border: 1px solid #000000;

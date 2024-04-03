@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 import AdminPage from './components/AdminPage.jsx'
 import EditProfile from './components/EditProfile.jsx'
+import RoomsPage from './components/RoomsPage.jsx'
 
 
 
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
   {
     path: "EditProfile/:username",
     element: <EditProfile/>,
+  },
+  {
+    path: "RoomsPage",
+    element: <RoomsPage/>,
   },
   
   

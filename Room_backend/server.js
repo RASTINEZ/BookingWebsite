@@ -2,6 +2,8 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const moment = require('moment');
+
 
 const app = express();
 app.use(cors());
@@ -87,6 +89,77 @@ app.put('/user', (req, res) => {
   
 
 
+
+
+// Retrieve problematic bookings with associated user and room information
+app.get('/getProblematicBookings', (req, res) => {
+    const sql = `
+        SELECT 
+            bookings.*, 
+            users.username AS user_username, 
+            users.email,
+            rooms.room_number, 
+            rooms.building 
+        FROM 
+            bookings 
+        JOIN 
+            users ON bookings.booked_by = users.username 
+        JOIN 
+            rooms ON bookings.room_id = rooms.room_number 
+        WHERE 
+            bookings.detail IS NOT NULL AND TRIM(bookings.detail) != ''
+    `;
+    db.query(sql, (err, data) => {
+        if (err) {
+            console.error('Error fetching problematic bookings:', err);
+            return res.status(500).json({ error: 'An error occurred while fetching problematic bookings' });
+        }
+        return res.json(data);
+    });
+});
+
+
+
+// Endpoint to send emails
+app.post('/sendEmailsToUsers', (req, res) => {
+    const { emails, subject, message } = req.body;
+
+    // Call your email service function to send emails
+    sendEmailToUsers(emails, subject, message)
+        .then(() => {
+            res.json({ message: 'Emails sent successfully' });
+        })
+        .catch(error => {
+            console.error('Error sending emails:', error);
+            res.status(500).json({ error: 'Failed to send emails' });
+        });
+});
+
+
+// Retrieve unique users and their emails who booked the specified room
+app.get('/getBookingUsers', (req, res) => {
+    const { roomNumber } = req.query;
+    const sql = `
+        SELECT DISTINCT users.username, users.email
+        FROM bookings
+        JOIN users ON bookings.booked_by = users.username
+        WHERE bookings.room_id = '${roomNumber}'
+    `;
+    db.query(sql, (err, users) => {
+        if (err) {
+            console.error('Error fetching booking users:', err);
+            return res.status(500).json({ error: 'An error occurred while fetching booking users' });
+        }
+        return res.json(users);
+    });
+});
+
+
+
+
+
+
+
   
 
 // Retrieve all bookings
@@ -100,6 +173,18 @@ app.get('/bookings', (req, res) => {
         return res.json(data);
     });
 });
+// Retrieve all bookings with room details
+app.get('/bookingsForChart', (req, res) => {
+    const sql = "SELECT b.*, r.room_number, r.room_type, r.building, r.available_status FROM bookings b INNER JOIN rooms r ON b.room_id = r.room_number";
+    db.query(sql, (err, data) => {
+        if (err) {
+            console.error('Error fetching bookings:', err);
+            return res.status(500).json({ error: 'An error occurred while fetching bookings' });
+        }
+        return res.json(data);
+    });
+});
+
 
 // Registration endpoint
 app.post('/register', (req, res) => {
@@ -193,6 +278,22 @@ app.get('/rooms', (req, res) => {
       return res.json(data);
     });
   });
+
+  // Rooms endpoint with building filter
+app.get('/allrooms', (req, res) => {
+    const { building } = req.query;
+    let sql = "SELECT * FROM rooms";
+  
+    if (building && building !== 'All') {
+        sql += ` WHERE building = '${building}'`; // Include WHERE clause if building is provided
+    }
+  
+    db.query(sql, (err, data) => {
+      if (err) return res.json(err);
+      return res.json(data);
+    });
+});
+
   
 // Endpoint to get image path for a specific room
 app.get('/room-image/:roomId', (req, res) => {
@@ -217,7 +318,9 @@ app.get('/room-image/:roomId', (req, res) => {
 });
 
 
+
 // Endpoint to get schedule for a specific room and date
+
 app.get('/schedule/:roomId', (req, res) => {
     const { roomId } = req.params;
     const { date } = req.query;
@@ -253,10 +356,12 @@ app.get('/schedule/:roomId', (req, res) => {
     });
 });
 
+
 // Import the email service module
 const { sendEmail } = require('./emailService');
 const { sendEmail2 } = require('./emailService');
 const { sendEmailToAdmin } = require('./emailService');
+const { sendEmailToUsers } = require('./emailService');
 
 //update booking endpoint  
 app.put('/bookings/:bookingId', (req, res) => {

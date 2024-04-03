@@ -5,6 +5,7 @@ import Card from './components/Card';
 import MaintainCard from './components/MaintainCard';
 import NavBar from './components/NavBar';
 import './App.css'; // Import CSS file for styling
+import { all } from 'axios';
 
 export const App = () => {
   const [data, setData] = useState([])
@@ -62,6 +63,7 @@ export const App = () => {
 
   const handleBuildingChange = (e) => {
     setBuildingFilter(e.target.value);
+    setFloorFilter("");
   };
   const handleFloorChange = (e) => {
     setFloorFilter(e.target.value);
@@ -144,7 +146,7 @@ export const App = () => {
             display: "flex",
             textAlign: "right",
             justifyContent: "flex-end",
-            marginLeft: "700px",
+            marginLeft: "600px",
           }}>
             <label htmlFor="filterFloor" style={{ color: "black" }}>
               Filter by Floor: &nbsp;
@@ -181,9 +183,18 @@ export const App = () => {
             onChange={(e) => setRoomFilter(e.target.value)}
           />
         </div>
+        
       </div>
+      {floorFilter && (
+    <div>
+      <h3 htmlFor="filterFloor" style={{ color: "black", marginLeft: "300px" }}>
+        ชั้น: {floorFilter}
+      </h3>
+    </div>
+      )}
 
       <div className="container">
+        
         {filteredHistory.map((room, index) => (
           <Card
             key={index}

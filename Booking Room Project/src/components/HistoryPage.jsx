@@ -241,6 +241,7 @@ const reportProblem = (bookingId, topic, detail) => {
         </ul>
 
       </div>
+      
       {/* Report Popup */}
       {showPopup && (
         <div className="popup-container">
