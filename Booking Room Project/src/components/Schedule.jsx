@@ -266,12 +266,20 @@ const handleReasonSubmit = () => {
 const handleAddBooking = () => {
   const slot = { startTime: start, endTime: end, available: true };
 
-  // Check if the slot is already booked
-  const isSlotBooked = bookedSlots.some(
-    (bookedSlot) =>
-      bookedSlot.startTime === slot.startTime &&
-      bookedSlot.endTime === slot.endTime
-  );
+  // Check if the start time and end time are the same
+  if (slot.startTime === slot.endTime) {
+    console.error('The start time and end time are the same.');
+    alert('The start time and end time cannot be the same. Please choose a valid time slot.');
+    return;
+  }
+
+  // Check if the slot overlaps with any booked slot
+  const isSlotBooked = bookedSlots.some(bookedSlot => {
+    return (
+      (bookedSlot.startTime < slot.endTime && bookedSlot.endTime > slot.startTime) || // Check if there is any overlap
+      (bookedSlot.startTime >= slot.startTime && bookedSlot.endTime <= slot.endTime) // Check if booked slot is within selected slot
+    );
+  });
 
   if (isSlotBooked) {
     console.error('The selected slot is already booked !.');

@@ -48,24 +48,24 @@ const RoomsPage = () => {
             });
     };
 
-    const handleSendEmails = () => {
-        const emails = selectedRoomUsers.map(user => user.email);
+    // const handleSendEmails = () => {
+    //     const emails = selectedRoomUsers.map(user => user.email);
 
-        axios.post('http://localhost:8081/sendEmailsToUsers', {
-            emails: emails,
-            subject: 'Your Booked room has a problem',
-            message: 'ห้องที่คุณจองไว้มีรายงานเข้ามาว่ามีปัญหา คุณอาจจะต้องจองห้องอื่น',
-        })
-        .then(response => {
-            console.log(response.data.message); // Log success message
-            alert("Emails sent !")
-            // Handle success if needed
-        })
-        .catch(error => {
-            console.error('Error sending emails:', error); // Log error message
-            // Handle error if needed
-        });
-    };
+    //     axios.post('http://localhost:8081/sendEmailsToUsers', {
+    //         emails: emails,
+    //         subject: 'Your Booked room has a problem',
+    //         message: 'ห้องที่คุณจองไว้มีรายงานเข้ามาว่ามีปัญหา คุณอาจจะต้องจองห้องอื่น',
+    //     })
+    //     .then(response => {
+    //         console.log(response.data.message); // Log success message
+    //         alert("Emails sent !")
+    //         // Handle success if needed
+    //     })
+    //     .catch(error => {
+    //         console.error('Error sending emails:', error); // Log error message
+    //         // Handle error if needed
+    //     });
+    // };
 
     const fetchBookings = () => {
         axios.get(`http://localhost:8081/bookingsForChart?building=${buildingFilter}`)
@@ -204,7 +204,7 @@ const RoomsPage = () => {
             {problematicBookings.length > 0 && (
                 <div>
                     
-                    <button onClick={handleSendEmails}>Send Emails</button>
+                    {/* <button onClick={handleSendEmails}>Send Emails</button> */}
                     <div style={{ marginBottom: "40px" }}></div>
                 </div>
             )}

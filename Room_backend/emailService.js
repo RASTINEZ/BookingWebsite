@@ -6,8 +6,8 @@ const transporter = nodemailer.createTransport({
     port: 587, // Port number for Outlook SMTP (587 for TLS)
     secure: false, // Use TLS (true for 465 port, false for other ports)
     auth: {
-        user: 'kuroomservice@hotmail.com', // Your Outlook email address
-        pass: 'poggerswebsite1234', // Your Outlook password
+        user: 'comsciroomservice@outlook.com', // Your Outlook email address
+        pass: 'servicebyrastin1337', // Your Outlook password
     },
 });
 const formatDateAndTime = (dateTimeString) => {
@@ -52,7 +52,7 @@ const sendEmail = (email, username, room_Id, start_Time, end_Time, status, booki
   }
   // Example email options
   const mailOptions = {
-    from: '"COM-SCI Room Service @KU" <kuroomservice@hotmail.com>',
+    from: '"COM-SCI Room Service @KU" <comsciroomservice@outlook.com>',
     to: email,
     subject: 'Booking Confirmation',
     text: emailText,
@@ -83,7 +83,7 @@ const sendEmail2 = (email, username, room_Id, date, start_Time, end_Time, status
 
   // Example email options
   const mailOptions = {
-    from: '"COM-SCI Room Service @KU" <kuroomservice@hotmail.com>',
+    from: '"COM-SCI Room Service @KU" <comsciroomservice@outlook.com>',
     to: email,
     subject: 'Booking Confirmation',
     text: emailText,
@@ -110,7 +110,7 @@ const sendEmailToAdmin = (bookingId, roomId, detail) => {
   
 
   const mailOptions = {
-      from: '"COM-SCI Room Service @KU" <kuroomservice@hotmail.com>',
+      from: '"COM-SCI Room Service @KU" <comsciroomservice@outlook.com>',
       to: adminEmail,
       subject: `Problem reported for booking ID: ${bookingId}, Room : ${roomId}`,
       text: `A problem has been reported for booking ID ${bookingId}, Room ${roomId} with the following details:\n\n${detail}`
