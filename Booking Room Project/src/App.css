@@ -1,0 +1,333 @@
+/* App.css */
+
+.container {
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap onto the next line */
+  justify-content: center;
+  gap: 20px; /* Adjust the gap between cards as needed */
+  padding-top: 20px;
+  background-color: #abccfa; /* Replace with the color code you want */
+}
+
+.page-container {
+  background-color: #cdd2ff; /* Replace with the color code you want */
+  
+}
+
+/* Optional: Add padding to the body to prevent content from being obscured by the fixed navbar */
+body {
+  padding-top: 64px; /* Adjust according to the height of your navbar */
+  background-color: #95aaf1;
+
+}
+
+
+.card {
+  flex: 0 0 calc(20% - 20px); /* Calculate the width for maximum of 5 cards per row */
+  /* Adjust the width and margin as needed to fit the desired number of cards per row */
+  margin-bottom: 20px; /* Add bottom margin to separate rows */
+}
+.maintain-rooms-container {
+  text-align: center;
+  padding: 20px;
+  background-color: hsl(0, 73%, 36%);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 2px auto;
+  max-width: 500px;
+}
+.maintain-rooms-container2 {
+  text-align: left;
+  padding: 10px;
+  background-color: hsl(0, 34%, 63%);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0px auto;
+  max-width: 500px;
+}
+
+.maintain-rooms-list {
+  list-style: none;
+  padding: 0;
+}
+
+.maintain-rooms-list li {
+  margin-bottom: 5px;
+  padding-left: 10px; /* Adjust as needed */
+  font-family: 'Courier New', Courier, monospace; /* Fixed-width font */
+  overflow-wrap: break-word; /* Add this line */
+  word-wrap: break-word; /* Add this line for compatibility */
+  box-sizing: border-box; /* Ensure padding and borders are included in the width */
+}
+
+.maintain-rooms-list li span.room {
+  font-size: larger; /* Increase font size for the room number */
+  font-weight: bold; /* Make the room number text bold */
+}
+
+.maintain-rooms-list li span.details {
+  font-size: larger; /* Increase font size for the details */
+  font-weight: bold; /* Make the text bold */
+}
+/* CSS */
+.navbar {
+  position: fixed; /* Fixed positioning */
+  top: 0; /* Stick to the top of the viewport */
+  width: 100%; /* Take up the full width of the viewport */
+  z-index: 1000; /* Ensure the navbar appears above other content */
+  background-color: #fff; /* Background color for the navbar */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for depth */
+}
+
+
+.admin-container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.select-option {
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ffffff; /* Border for the entire table */
+  margin-right: 20px; /* Add right margin to create space */
+  margin-left: 20px; /* Add right margin to create space */
+}
+
+th, td {
+  padding: 8px;
+  text-align: center;
+}
+
+
+th {
+  background-color: #ffffff; /* Background color for table headers */
+}
+
+tr:nth-child(even) {
+  background-color: #DAFFFB; /* Alternate row background color */
+}
+
+
+/* Define a new button style */
+.custom-button {
+  background-color: #007bff; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
+}
+.red-button {
+  background-color: #e93636; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
+}
+.green-button {
+  background-color: #4dd318; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
+}
+.checkin-green-button {
+  background-color: #4dd318; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.checkin-blue-button {
+  background-color: #007bff; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.yellow-button {
+  background-color: #dfad0b; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
+}
+.blue-button {
+  background-color: #001bb4; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+  margin-bottom: 10px;
+}
+
+/* Hover effect */
+.custom-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup {
+  background-color: rgb(248, 248, 248);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup h3 {
+  margin-top: 0;
+}
+.popup textarea {
+  width: 100%;
+  min-height: 100px;
+  margin-bottom: 10px;
+}
+
+.popup .submit-buttons button {
+  margin-right: 10px;
+}
+
+.container2 {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.edit-profile {
+  color: rgb(103, 172, 228); /* Specify your desired text color */
+}
+
+.booking-history {
+  color: rgb(132, 241, 151); /* Specify your desired text color */
+}
+.custom-logout-btn {
+  color: #ff5733; /* Example custom logout button color */
+}
+.custom-navbar {
+  background-color: #070F2B; /* Replace with the color code you want */
+}
+
+.user-table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #070F2B;
+}
+.room-table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #069625;
+}
+
+.user-column {
+  border: 1px solid #000000;
+  text-align: left;
+  padding: 8px;
+  background-color: #64CCC5;
+}
+.top-column {
+  border: 1px solid #000000;
+  text-align: center;
+  padding: 8px;
+  background-color: #176B87;
+}
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.booking-table th,
+.booking-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #000000;
+}
+
+.booking-table th {
+  background-color: #31a0c5;
+  font-weight: bold;
+}
+
+.booking-table tr:nth-child(even) {
+  background-color: #99c2ce; /* Even row color */
+}
+
+.booking-table tr:nth-child(odd) {
+  background-color: #acdadd; /* Odd row color */
+}
+
+.booking-table tr:hover {
+  background-color: #e0e0e0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
