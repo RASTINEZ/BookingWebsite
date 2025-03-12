@@ -15,7 +15,7 @@ This is a **Room Booking Website** built using:
 ✅ **Email booking confirmation** – Users receive a confirmation email after successful booking.  
 
 ## Technologies Used
-- **Frontend:** React, Tailwind CSS
+- **Frontend:** React
 - **Backend:** Node.js, Express.js
 - **Database:** MySQL
 - **Email Service:** Nodemailer (SMTP with Outlook/Gmail)
