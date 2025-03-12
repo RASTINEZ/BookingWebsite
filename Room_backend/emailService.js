@@ -6,8 +6,8 @@ const transporter = nodemailer.createTransport({
     port: 587, // Port number for Outlook SMTP (587 for TLS)
     secure: false, // Use TLS (true for 465 port, false for other ports)
     auth: {
-        user: 'comsciroomservice@outlook.com', // Your Outlook email address
-        pass: 'servicebyrastin1337', // Your Outlook password
+        user: process.env.EMAIL_USER, // Your Outlook email address
+        pass: process.env.EMAIL_PASS, // Your Outlook password
     },
 });
 const formatDateAndTime = (dateTimeString) => {
@@ -52,7 +52,7 @@ const sendEmail = (email, username, room_Id, start_Time, end_Time, status, booki
   }
   // Example email options
   const mailOptions = {
-    from: '"COM-SCI Room Service @KU" <comsciroomservice@outlook.com>',
+    from: '"COM-SCI Room Service @KU" <comsciroomservice@hotmail.com>',
     to: email,
     subject: 'Booking Confirmation',
     text: emailText,
@@ -83,7 +83,7 @@ const sendEmail2 = (email, username, room_Id, date, start_Time, end_Time, status
 
   // Example email options
   const mailOptions = {
-    from: '"COM-SCI Room Service @KU" <comsciroomservice@outlook.com>',
+    from: '"COM-SCI Room Service @KU" <comsciroomservice@hotmail.com>',
     to: email,
     subject: 'Booking Confirmation',
     text: emailText,
@@ -110,7 +110,7 @@ const sendEmailToAdmin = (bookingId, roomId, detail) => {
   
 
   const mailOptions = {
-      from: '"COM-SCI Room Service @KU" <comsciroomservice@outlook.com>',
+      from: '"COM-SCI Room Service @KU" <comsciroomservice@hotmail.com>',
       to: adminEmail,
       subject: `Problem reported for booking ID: ${bookingId}, Room : ${roomId}`,
       text: `A problem has been reported for booking ID ${bookingId}, Room ${roomId} with the following details:\n\n${detail}`
@@ -125,33 +125,11 @@ const sendEmailToAdmin = (bookingId, roomId, detail) => {
   });
 };
 
-const sendEmailToUsers = (emails, subject, message) => {
-  return new Promise((resolve, reject) => {
-      // Send emails to each recipient
-      for (const email of emails) {
-          const mailOptions = {
-              from: 'COM-SCI Room Service @KU" <kuroomservice@hotmail.com>', // Sender's name and email address
-              to: email,
-              subject: subject,
-              text: message,
-          };
 
-          transporter.sendMail(mailOptions, (error, info) => {
-              if (error) {
-                  console.error('Error sending email:', error);
-                  reject(error); // Reject the promise if an error occurs
-              } else {
-                  console.log('Email sent:', info.response);
-                  resolve(); // Resolve the promise if email sent successfully
-              }
-          });
-      }
-  });
-};
 
 
 
 
 
 module.exports = { sendEmail,
-   sendEmail2, sendEmailToAdmin, sendEmailToUsers };
+   sendEmail2, sendEmailToAdmin };
